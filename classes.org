@@ -1,0 +1,3547 @@
+* 09_09_2024
+#+begin_src R :file generated_graphs/09_09_2024.png :results graphics file
+  data <- read.table('../dados/advertising.txt', header=TRUE, sep = '\t')
+  head(data)
+  plot(data$Sales~data$TV)
+  newdata <- (lm(data$Sales~data$TV))
+  abline(newdata)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/09_09_2024.png]]
+
+* 16_09_2024
+#+begin_src R :results output
+  x <- c(1.74, 1.83, 1.68, 1.82)
+  y <- c(68,80,62,89)
+  plot(x,y)
+  cov(x,y)
+  z <- rep(5,4)
+  cov(4*x,z)
+  cov(4*x,(5*y+3))
+  x1 <- c(-2, -1, 0, 1, 2)
+  z1 <- x1^2
+  plot(x1,z1)
+#+end_src
+
+#+RESULTS:
+: [1] 0.7925
+: [1] 0
+: [1] 15.85
+
+* [[file:~/Documents/CD/year_2/semester_01/modelos_lineares_aplicacoes/slides/covarianciacorrelaccao.pdf][Slide]]
+#+begin_src R :results output
+  x_1 <- c(1.74, 1.83, 1.68, 1.82)
+  y_1 <- c(68,80,62,89)
+  cov_1 <- cov(x_1,y_1)
+  cor_1 <- cor(x_1,y_1)
+  x_2 <- c(68.5, 72, 74.4, 72, 70.1, 66.1)
+  y_2 <- c(149.9, 176.3, 196.2, 172, 154.3, 136.7)
+  cov_2 <- cov(x_2,y_2)
+  cor_2 <- cor(x_2,y_2)
+
+  cov_1
+  sd(x_1)*sd(y_1)
+  cov_1/(sd(x_1)*sd(y_1))
+  cor_1
+  cov_2
+  cor_2
+#+end_src
+
+#+RESULTS:
+: [1] 0.7925
+: [1] 0.8572667
+: [1] 0.9244497
+: [1] 0.9244497
+: [1] 61.64133
+: [1] 0.9795817
+
+* 23_09_2024
+** 01
+#+begin_src R :session 23_09_2024 :file generated_graphs/23_09_2024.png :results graphics file
+  x <- c(1,2,3,4,5)
+  y <- c(2,5,8,11,14)
+  plot(x,y)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/23_09_2024.png]]
+
+** 02
+#+begin_src R :session 23_09_2024 :results output
+  cor(x,y)
+  cor(x,y, method='spearman')
+#+end_src
+
+#+RESULTS:
+: [1] 1
+: [1] 1
+** 03
+#+begin_src R :results output
+  x <- c(10,20,30,40,50)
+  y <- c(2,15,20,18,25)
+  cor(x,y,method='spearman')
+#+end_src
+
+#+RESULTS:
+: [1] 0.9
+
+** 04
+#+begin_src R :results output
+  x <- c(10,1,2,5,4,3,6,7,9,8)
+  y <- c(95,60,52.5,51.5,49.5,47.5,55,48,56,53)
+  cor(x,y,method='spearman')
+  cor.test(x,y,method='spearman')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 0.3333333
+
+    Spearman's rank correlation rho
+
+data:  x and y
+S = 110, p-value = 0.3488
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho
+0.3333333
+
+#+end_example
+
+#+begin_src R :results output
+  data(mtcars)
+  x <- mtcars$mpg
+  y <- mtcars$hp
+  cor(x,y)
+#+end_src
+
+#+RESULTS:
+: [1] -0.7761684
+
+#+begin_src R :results output
+  x <- c(50,80,100,45,50)
+  y <- c(6,8,8,5,7)
+  cor(x,y,method='spearman')
+#+end_src
+
+#+RESULTS:
+: [1] 0.9473684
+
+* 25_09_2024
+#+begin_src R :results output
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  summary(model)
+  #beta1 formula:
+  cor(mtcars$hp, mtcars$mpg)*sd(mtcars$hp)/sd(mtcars$mpg)
+  #beta0 formula:
+  mean(mtcars$hp) - (-8.83) * mean(mtcars$mpg)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = hp ~ mpg, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-59.26 -28.93 -13.45  25.65 143.36
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   324.08      27.43  11.813 8.25e-13 ***
+mpg            -8.83       1.31  -6.742 1.79e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 43.95 on 30 degrees of freedom
+Multiple R-squared:  0.6024,	Adjusted R-squared:  0.5892
+F-statistic: 45.46 on 1 and 30 DF,  p-value: 1.788e-07
+
+[1] -8.829731
+[1] 324.0877
+#+end_example
+
+* 02_10_2024
+#+begin_src R :results output
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  plot(hp~mpg, data=mtcars)
+  summary (model)
+  abline(model, col='red')
+
+  dim(mtcars)  # shows lines and columns
+
+                                          # Qual é o hp estimado do Volvo 142E?
+  fitted(model)  # ver a entrada correspondente
+
+                                          # Qual é o respetivo resíduo
+  residuals(model)  # ver a entrada correspondente
+
+                                          #
+  sum(residuals(model)^2)
+
+  var(mtcars$mpg)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = hp ~ mpg, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-59.26 -28.93 -13.45  25.65 143.36
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   324.08      27.43  11.813 8.25e-13 ***
+mpg            -8.83       1.31  -6.742 1.79e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 43.95 on 30 degrees of freedom
+Multiple R-squared:  0.6024,	Adjusted R-squared:  0.5892
+F-statistic: 45.46 on 1 and 30 DF,  p-value: 1.788e-07
+
+[1] 32 11
+          Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive
+          138.65796           138.65796           122.76445           135.12607
+  Hornet Sportabout             Valiant          Duster 360           Merc 240D
+          158.96634           164.26418           197.81716           108.63688
+           Merc 230            Merc 280           Merc 280C          Merc 450SE
+          122.76445           154.55148           166.91310           179.27473
+         Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental
+          171.32797           189.87040           232.25311           232.25311
+  Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla
+          194.28527            37.99903            55.65849            24.75443
+      Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28
+          134.24310           187.22148           189.87040           206.64689
+   Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa
+          154.55148            83.03066            94.50931            55.65849
+     Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E
+          184.57256           150.13661           191.63635           135.12607
+          Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive
+        -28.6579634         -28.6579634         -29.7644476         -25.1260710
+  Hornet Sportabout             Valiant          Duster 360           Merc 240D
+         16.0336553         -59.2641833          47.1828390         -46.6368780
+           Merc 230            Merc 280           Merc 280C          Merc 450SE
+        -27.7644476         -31.5514792         -43.9131026           0.7252741
+         Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental
+          8.6720320          -9.8704031         -27.2531119         -17.2531119
+  Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla
+         35.7147314          28.0009699          -3.6584921          40.2455664
+      Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28
+        -37.2430979         -37.2214838         -39.8704031          38.3531080
+   Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa
+         20.4485208         -17.0306581          -3.5093084          57.3415079
+     Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E
+         79.4274355          24.8633863         143.3636507         -26.1260710
+[1] 57935.56
+[1] 36.3241
+#+end_example
+
+* 07_10_2024
+#+begin_src R :results output
+  data(mtcars)
+  model=lm(hp~mpg, data=mtcars)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = hp ~ mpg, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-59.26 -28.93 -13.45  25.65 143.36
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   324.08      27.43  11.813 8.25e-13 ***
+mpg            -8.83       1.31  -6.742 1.79e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 43.95 on 30 degrees of freedom
+Multiple R-squared:  0.6024,	Adjusted R-squared:  0.5892
+F-statistic: 45.46 on 1 and 30 DF,  p-value: 1.788e-07
+
+#+end_example
+#+begin_src R :results output
+  p_val = 2*(1-pt(abs(-2.16), 30))
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :results output
+  cor.test(mtcars$hp, mtcars$mpg)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+    Pearson's product-moment correlation
+
+data:  mtcars$hp and mtcars$mpg
+t = -6.7424, df = 30, p-value = 1.788e-07
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.8852686 -0.5860994
+sample estimates:
+       cor
+-0.7761684
+
+#+end_example
+
+#+begin_src R :results output
+  data(mtcars)
+  model=lm(hp~mpg, data=mtcars)
+  #  Cálculo do IC de beta0 e beta1 com 95% de confiança.
+  confint(model)
+
+  #  ... com 90% de confiança.
+  confint(model, level=0.9)
+
+  #
+  324.08+(c(-1,1)*qt(0.975, 30)*27.43)
+#+end_src
+
+#+RESULTS:
+:                 2.5 %     97.5 %
+: (Intercept) 268.05605 380.108579
+: mpg         -11.50426  -6.155202
+:                   5 %       95 %
+: (Intercept) 277.52085 370.643774
+: mpg         -11.05244  -6.607024
+: [1] 268.0605 380.0995
+
+* 11_10_2024
+
+#+begin_src R :results output
+  summary(mtcars$mpg)
+  data(mtcars)
+  model=lm(hp~mpg, data=mtcars)
+                                          #  New é uma nova observação
+  predict(model, new=data.frame(mpg=c(20)), interval='confidence')  #  Para o valor esperado.
+
+  predict(model, new=data.frame(mpg=c(20)), interval='prediction')  #  Para o valor previsto
+                                          #  'Fit' é igual para valor esperado e previsto. ICs são diferentes
+
+#+end_src
+
+#+RESULTS:
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+:   10.40   15.43   19.20   20.09   22.80   33.90
+:        fit      lwr      upr
+: 1 147.4877 131.6205 163.3549
+:        fit      lwr      upr
+: 1 147.4877 56.34766 238.6277
+
+#+begin_src R :results output
+  data(mtcars)
+  model=lm(hp~mpg, data=mtcars)
+  print('Para dois pontos de uma  vez.')
+  predict(model, new=data.frame(mpg=c(20, 25)), interval='confidence', level=0.9)  #  Para dois pontos de uma  vez.
+  print('Para um intervalo de pontos.')
+  predict(model, new=data.frame(mpg=c(20:25)), interval='confidence', level=0.9)  #  Para um intervalo de pontos. Verificando que com o aumento do x(mpg) o valor de fit(ŷ) diminui, verificamos que o declive é negativo.
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] "Para dois pontos de uma  vez."
+       fit       lwr      upr
+1 147.4877 134.30099 160.6744
+2 103.3390  86.22406 120.4540
+[1] "Para um intervalo de pontos."
+       fit       lwr      upr
+1 147.4877 134.30099 160.6744
+2 138.6580 125.31877 151.9972
+3 129.8282 115.97688 143.6796
+4 120.9985 106.31291 135.6841
+5 112.1688  96.37782 127.9597
+6 103.3390  86.22406 120.4540
+#+end_example
+
+#+begin_src R :results output
+  data(mtcars)
+  model=lm(hp~mpg, data=mtcars)
+  anova(model)
+  var(mtcars$hp)
+  1-pf(45.46, 1, 30)  #  Não se multiplica por dois, pois o gráfico da distribuição F é sempre positivo.
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Response: hp
+          Df Sum Sq Mean Sq F value    Pr(>F)
+mpg        1  87791   87791   45.46 1.788e-07 ***
+Residuals 30  57936    1931
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] 4700.867
+[1] 1.787764e-07
+#+end_example
+
+* 14_10_2024
+#+begin_src R :results output
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  summary(model)
+                                          #  We want the line 'Multiple R-squared:  0.6024,	Adjusted R-squared:  0.5892'
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = hp ~ mpg, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-59.26 -28.93 -13.45  25.65 143.36
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   324.08      27.43  11.813 8.25e-13 ***
+mpg            -8.83       1.31  -6.742 1.79e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 43.95 on 30 degrees of freedom
+Multiple R-squared:  0.6024,	Adjusted R-squared:  0.5892
+F-statistic: 45.46 on 1 and 30 DF,  p-value: 1.788e-07
+
+#+end_example
+
+** Exercício 1
+#+begin_src R :file generated_graphs/./14_10_2024.png :results output graphics file
+  Y <- c(5,10,12,29,36,83,102)
+  X <- c(1,7,13,20,27,34,62)
+  plot(Y~X)
+
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/./14_10_2024.png]]
+
+#+begin_src R :results output
+  Y <- c(5,10,12,29,36,83,102)
+  X <- c(1,7,13,20,27,34,62)
+  model = lm(Y~X)
+  summary(model)
+  confint(model, level=0.95)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Y ~ X)
+
+Residuals:
+      1       2       3       4       5       6       7
+ 5.1645 -0.4655 -9.0955 -4.4971 -9.8988 24.6995 -5.9071
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -1.9361     7.9483  -0.244  0.81722
+X             1.7717     0.2639   6.712  0.00111 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 13.21 on 5 degrees of freedom
+Multiple R-squared:  0.9001,	Adjusted R-squared:  0.8801
+F-statistic: 45.06 on 1 and 5 DF,  p-value: 0.001111
+
+                 2.5 %    97.5 %
+(Intercept) -22.367847 18.495555
+X             1.093188  2.450142
+#+end_example
+* 16_10_2024
+#+begin_src R :results output
+  Y <- c(5,10,12,29,36,83,102)
+  X <- c(1,7,13,20,27,34,62)
+  model = lm(Y~X)
+  summary(model)
+  confint(model, level=0.95)
+  cor.test(X,Y)
+  print('P-VALUE:')
+  2*(1-pt(abs(-0.8651), 5))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Y ~ X)
+
+Residuals:
+      1       2       3       4       5       6       7
+ 5.1645 -0.4655 -9.0955 -4.4971 -9.8988 24.6995 -5.9071
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -1.9361     7.9483  -0.244  0.81722
+X             1.7717     0.2639   6.712  0.00111 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 13.21 on 5 degrees of freedom
+Multiple R-squared:  0.9001,	Adjusted R-squared:  0.8801
+F-statistic: 45.06 on 1 and 5 DF,  p-value: 0.001111
+
+                 2.5 %    97.5 %
+(Intercept) -22.367847 18.495555
+X             1.093188  2.450142
+
+    Pearson's product-moment correlation
+
+data:  X and Y
+t = 6.7124, df = 5, p-value = 0.001111
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.6853097 0.9926171
+sample estimates:
+      cor
+0.9487426
+
+[1] "P-VALUE:"
+[1] 0.4265332
+#+end_example
+#+begin_src R :results output
+  Y <- c(5,10,12,29,36,83,102)
+  X <- c(1,7,13,20,27,34,62)
+  model = lm(Y~X)
+  summary(model)
+  print('SST')
+  var(Y)
+  var(Y)*(length(Y)-1)
+  shapiro.test(rstandard(model))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Y ~ X)
+
+Residuals:
+      1       2       3       4       5       6       7
+ 5.1645 -0.4655 -9.0955 -4.4971 -9.8988 24.6995 -5.9071
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -1.9361     7.9483  -0.244  0.81722
+X             1.7717     0.2639   6.712  0.00111 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 13.21 on 5 degrees of freedom
+Multiple R-squared:  0.9001,	Adjusted R-squared:  0.8801
+F-statistic: 45.06 on 1 and 5 DF,  p-value: 0.001111
+
+[1] "SST"
+[1] 1456.286
+[1] 8737.714
+
+    Shapiro-Wilk normality test
+
+data:  rstandard(model)
+W = 0.81473, p-value = 0.05712
+
+#+end_example
+
+#+begin_src R :file generated_graphs/16_10_2024.png :results output graphics file
+  Y <- c(14,38,54,76,95)
+  X <- c(0,25,50,75,100)
+  model = lm(Y~X)
+  plot(Y,X)
+  shapiro.test(rstandard(model))
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/16_10_2024.png]]
+
+#+begin_src R :results output
+  Y <- c(14,38,54,76,95)
+  X <- c(0,25,50,75,100)
+  model = lm(Y~X)
+  summary(model)
+  print('ARSTIE')
+  predict(model, new=data.frame(X=c(80)), interval='confidence', level=0.95)
+  residuals(model)
+  shapiro.test(rstandard(model))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Y ~ X)
+
+Residuals:
+   1    2    3    4    5
+-1.4  2.6 -1.4  0.6 -0.4
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.40000    1.49666   10.29  0.00196 **
+X            0.80000    0.02444   32.73 6.27e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.932 on 3 degrees of freedom
+Multiple R-squared:  0.9972,	Adjusted R-squared:  0.9963
+F-statistic:  1071 on 1 and 3 DF,  p-value: 6.267e-05
+
+[1] "ARSTIE"
+   fit      lwr      upr
+1 79.4 75.79348 83.00652
+   1    2    3    4    5
+-1.4  2.6 -1.4  0.6 -0.4
+
+    Shapiro-Wilk normality test
+
+data:  rstandard(model)
+W = 0.93589, p-value = 0.637
+
+#+end_example
+
+** Análise de resíduos
+#+begin_src R :file generated_graphs/16_10_2024_02 :results output
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  residuals(model)
+  rstandard(model)
+  qqnorm(rstandard(model))
+  qqline(rstandard(model))
+  shapiro.test(rstandard(model)) # P-value is below 0.5, therefore the errors do not follow a normal distribution. We reject H0.
+#+end_src
+
+#+RESULTS:
+#+begin_example
+          Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive
+        -28.6579634         -28.6579634         -29.7644476         -25.1260710
+  Hornet Sportabout             Valiant          Duster 360           Merc 240D
+         16.0336553         -59.2641833          47.1828390         -46.6368780
+           Merc 230            Merc 280           Merc 280C          Merc 450SE
+        -27.7644476         -31.5514792         -43.9131026           0.7252741
+         Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental
+          8.6720320          -9.8704031         -27.2531119         -17.2531119
+  Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla
+         35.7147314          28.0009699          -3.6584921          40.2455664
+      Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28
+        -37.2430979         -37.2214838         -39.8704031          38.3531080
+   Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa
+         20.4485208         -17.0306581          -3.5093084          57.3415079
+     Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E
+         79.4274355          24.8633863         143.3636507         -26.1260710
+          Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive
+        -0.66281473         -0.66281473         -0.69047215         -0.58136420
+  Hornet Sportabout             Valiant          Duster 360           Merc 240D
+         0.37102228         -1.37266540          1.10801525         -1.08752726
+           Merc 230            Merc 280           Merc 280C          Merc 450SE
+        -0.64407638         -0.72972602         -1.01770816          0.01687379
+         Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental
+         0.20121427         -0.23074441         -0.65909150         -0.41725068
+  Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla
+         0.83693640          0.69763546         -0.08903157          1.02429403
+      Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28
+        -0.86183418         -0.86898416         -0.93206657          0.90606966
+   Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa
+         0.47293560         -0.40347292         -0.08246482          1.39543950
+     Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E
+         1.85203236          0.57487418          3.35460987         -0.60450209
+
+    Shapiro-Wilk normality test
+
+data:  rstandard(model)
+W = 0.89118, p-value = 0.003721
+
+#+end_example
+
+#+begin_src R :file generated_graphs/16_10_2024_02.png :results output graphics file
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  qqnorm(rstandard(model))
+  qqline(rstandard(model))
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/16_10_2024_02.png]]
+
+#+begin_src R :file generated_graphs/16_10_2024_03.png :results output graphics file
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  plot(fitted(model), rstandard(model))
+  abline(h=0)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/16_10_2024_03.png]]
+
+#+begin_src  R :file generated_graphs/16_10_2024_04.png :results output graphics file
+  data(mtcars)
+  model = lm(hp~mpg, data=mtcars)
+  plot(1:nrow(mtcars), rstandard(model))
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/16_10_2024_04.png]]
+
+* 21_10_2024
+
+#+begin_src R :file generated_graphs/21_10_2024.png :results output graphics file
+  library(GLMsData)
+  data(lungcap)
+  head(lungcap)
+  plot(FEV~Ht, data=lungcap)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/21_10_2024.png]]
+
+#+begin_src R :results output
+  library(GLMsData)
+  data(lungcap)
+  head(lungcap)
+  model_01=lm(FEV~Ht, data=lungcap)
+  summary(model_01)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  Age   FEV Ht Gender Smoke
+1   3 1.072 46      F     0
+2   4 0.839 48      F     0
+3   4 1.102 48      F     0
+4   4 1.389 48      F     0
+5   4 1.577 49      F     0
+6   4 1.418 49      F     0
+
+Call:
+lm(formula = FEV ~ Ht, data = lungcap)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.75167 -0.26619 -0.00401  0.24474  2.11936
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) -5.432679   0.181460  -29.94   <2e-16 ***
+Ht           0.131976   0.002955   44.66   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4307 on 652 degrees of freedom
+Multiple R-squared:  0.7537,	Adjusted R-squared:  0.7533
+F-statistic:  1995 on 1 and 652 DF,  p-value: < 2.2e-16
+
+#+end_example
+
+** verificar pressupostos do modelo
+*** verificar normalidade
+#+begin_src R :file generated_graphs/21_10_2024_02.png :results output graphics file
+  library(GLMsData)
+  data(lungcap)
+  model_01=lm(FEV~Ht, data=lungcap)
+  plot(rstandard(model_01)~fitted(model_01))
+  qqnorm(rstandard(model_01))
+  qqline(rstandard(model_01))
+  shapiro.test(rstandard(model_01))
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/21_10_2024_02.png]]
+
+*** verificar variância constante
+#+begin_src R :file generated_graphs/21_10_2024_03.png :results output graphics file
+  library(GLMsData)
+  data(lungcap)
+  model_01=lm(FEV~Ht, data=lungcap)
+  plot(rstandard(model_01)~fitted(model_01))
+  abline(h=0)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/21_10_2024_03.png]]
+
+** falhando algum pressuposto (falharam ambos), faz-se uma transformação
+*** Para o segundo pressuposto
+#+begin_src R :file generated_graphs/21_10_2024_04.png :results output graphics file
+  library(GLMsData)
+  data(lungcap)
+  model_02=lm(log(FEV)~Ht, data=lungcap)
+  summary(model_02)
+  plot(rstandard(model_02)~fitted(model_02))
+  abline(h=0)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/21_10_2024_04.png]]
+
+*** Para o primeiro pressuposto
+#+begin_src R :file generated_graphs/21_10_2024_05.png :results output graphics file
+  library(GLMsData)
+  data(lungcap)
+  model_02=lm(log(FEV)~Ht, data=lungcap)
+  plot(rstandard(model_02)~fitted(model_02))
+  qqnorm(rstandard(model_02))
+  qqline(rstandard(model_02))
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/21_10_2024_05.png]]
+
+#+begin_src R :results output
+  #  Usando o shapiro.test em vez de verificar pelo gráfico
+  library(GLMsData)
+  data(lungcap)
+  model_02=lm(log(FEV)~Ht, data=lungcap)
+  shapiro.test(rstandard(model_02))  # p-value abaixo de 0.5, portanto falha
+#+end_src
+
+#+RESULTS:
+:
+:   Shapiro-Wilk normality test
+:
+: data:  rstandard(model_02)
+: W = 0.98297, p-value = 6.624e-07
+:
+
+** Variável categórica binária
+#+begin_src R :results output
+  library(GLMsData)
+  data(lungcap)
+  model_03=lm(log(FEV)~Gender, data=lungcap)
+  summary(model_03)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = log(FEV) ~ Gender, data = lungcap)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.19855 -0.23323  0.02968  0.25235  0.78625
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  0.85736    0.01843  46.516  < 2e-16 ***
+GenderM      0.11303    0.02572   4.396 1.29e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3287 on 652 degrees of freedom
+Multiple R-squared:  0.02878,	Adjusted R-squared:  0.02729
+F-statistic: 19.32 on 1 and 652 DF,  p-value: 1.289e-05
+
+#+end_example
+
+#+begin_src R :results output
+  library(GLMsData)
+  data(lungcap)
+  lungcap$Gender=relevel(as.factor(lungcap$Gender), 'M')
+  model_03=lm(log(FEV)~Gender, data=lungcap)
+  summary(model_03)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = log(FEV) ~ Gender, data = lungcap)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.19855 -0.23323  0.02968  0.25235  0.78625
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  0.97040    0.01793  54.118  < 2e-16 ***
+GenderF     -0.11303    0.02572  -4.396 1.29e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3287 on 652 degrees of freedom
+Multiple R-squared:  0.02878,	Adjusted R-squared:  0.02729
+F-statistic: 19.32 on 1 and 652 DF,  p-value: 1.289e-05
+
+#+end_example
+*** fazer o t.test
+#+begin_src R :results output
+  library(GLMsData)
+  data(lungcap)
+  model_03=lm(log(FEV)~Gender, data=lungcap)
+  t.test(log(lungcap$FEV)~lungcap$Gender, var.equal=TRUE)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+    Two Sample t-test
+
+data:  log(lungcap$FEV) by lungcap$Gender
+t = -4.3956, df = 652, p-value = 1.289e-05
+alternative hypothesis: true difference in means between group F and group M is not equal to 0
+95 percent confidence interval:
+ -0.16352758 -0.06253905
+sample estimates:
+mean in group F mean in group M
+      0.8573648       0.9703981
+
+#+end_example
+
+* 23_10_2024
+#+name: tryout
+#+begin_src R :session 23_10_2024__01 :file generated_graphs/23_10_2024__01_01.png :results graphics file output
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  plot(ano,aumento)
+  abline(lm(aumento~ano))
+#+end_src
+
+#+RESULTS: tryout
+[[file:generated_graphs/23_10_2024__01_01.png]]
+
+#+begin_src R :session :results output
+  model <- lm(aumento~ano)
+  print('RESIDUALS:')
+  residuals(model)
+  print('RSTANDARD:')
+  abs(rstandard(model)) > 3
+  abs(rstandard(model)) > 2
+#+end_src
+
+#+RESULTS:
+: [1] "RESIDUALS:"
+:             1             2             3             4             5             6             7
+: -0.1403571429 -0.2064285714 -0.0125000000  0.6514285714 -0.0146428571 -0.0007142857 -0.2767857143
+: [1] "RSTANDARD:"
+:     1     2     3     4     5     6     7
+: FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+:     1     2     3     4     5     6     7
+: FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+
+#+begin_src R  :file generated_graphs/23_10_2024_02.png :results output graphics file
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  plot(rstandard(model))
+  abline(h=0)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/23_10_2024_02.png]]
+
+#+begin_src R :file generated_graphs/23_10_2024_03.png :results output graphics file
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  plot(fitted(model), rstandard(model))
+  abline(h=0)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/23_10_2024_03.png]]
+
+** Pontos alavanca
+#+begin_src R  :file generated_graphs/23_10_2024_04.png :results output graphics file
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  hatvalues(model)
+  plot(hatvalues(model))
+  abline(h=2*2/7)
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/23_10_2024_04.png]]
+
+#+begin_src R :results output
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  hatvalues(model)
+  hatvalues(model)>2*2/7
+#+end_src
+
+#+RESULTS:
+:         1         2         3         4         5         6         7
+: 0.4642857 0.2857143 0.1785714 0.1428571 0.1785714 0.2857143 0.4642857
+:     1     2     3     4     5     6     7
+: FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+
+#+begin_src R :results output
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  model.matrix(model)
+  X <- model.matrix(model)
+  H <- X%*%solve(t(X)%*%X)%*%t(X)
+  H
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  (Intercept) ano
+1           1  40
+2           1  41
+3           1  42
+4           1  43
+5           1  44
+6           1  45
+7           1  46
+attr(,"assign")
+[1] 0 1
+            1             2          3         4          5             6
+1  0.46428571  3.571429e-01 0.25000000 0.1428571 0.03571429 -7.142857e-02
+2  0.35714286  2.857143e-01 0.21428571 0.1428571 0.07142857 -1.332268e-15
+3  0.25000000  2.142857e-01 0.17857143 0.1428571 0.10714286  7.142857e-02
+4  0.14285714  1.428571e-01 0.14285714 0.1428571 0.14285714  1.428571e-01
+5  0.03571429  7.142857e-02 0.10714286 0.1428571 0.17857143  2.142857e-01
+6 -0.07142857 -3.996803e-15 0.07142857 0.1428571 0.21428571  2.857143e-01
+7 -0.17857143 -7.142857e-02 0.03571429 0.1428571 0.25000000  3.571429e-01
+            7
+1 -0.17857143
+2 -0.07142857
+3  0.03571429
+4  0.14285714
+5  0.25000000
+6  0.35714286
+7  0.46428571
+#+end_example
+
+** Observações influentes
+#+begin_src R :results output
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  cooks.distance(model)
+  cooks.distance(model) > 1
+#+end_src
+
+#+RESULTS:
+:            1            2            3            4            5            6
+: 1.413565e-01 1.058414e-01 1.834088e-04 3.659796e-01 2.516818e-04 1.267242e-06
+:            7
+: 5.497104e-01
+:     1     2     3     4     5     6     7
+: FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+
+#+begin_src R :file generated_graphs/23_10_2024_05.png :results output graphics file
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  plot(cooks.distance(model))
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/23_10_2024_05.png]]
+
+#+begin_src R :results output
+  x <- c(1,4,5,9,13,11,23,23,28)
+  ano <- c(40:46)
+  aumento <- c(1.62,1.63,1.90,2.64,2.05,2.14,1.94)
+  model <- lm(aumento~ano)
+  influence(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+$hat
+        1         2         3         4         5         6         7
+0.4642857 0.2857143 0.1785714 0.1428571 0.1785714 0.2857143 0.4642857
+
+$coefficients
+   (Intercept)           ano
+1 -1.244500000  2.807143e-02
+2 -0.928928571  2.064286e-02
+3 -0.025543478  5.434783e-04
+4  0.108571429 -1.993218e-17
+5  0.024829193 -6.366460e-04
+6  0.002928571 -7.142857e-05
+7  2.306547619 -5.535714e-02
+
+$sigma
+        1         2         3         4         5         6         7
+0.3629325 0.3549633 0.3753210 0.1309273 0.3752974 0.3753841 0.3242868
+
+$wt.res
+            1             2             3             4             5
+-0.1403571429 -0.2064285714 -0.0125000000  0.6514285714 -0.0146428571
+            6             7
+-0.0007142857 -0.2767857143
+
+#+end_example
+
+* 28_10_2024
+** 1
+*** a
+#+begin_src R :session 28_10_2024 :results output
+  y <- c(28,112,160,152,156,124,42,136,150,170,124,104)
+  x <- c(75,100,125,150,175,200,75,100,125,150,175,200)
+  model <- lm(y~x)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-61.43 -34.04  12.50  34.04  44.91
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  50.9429    39.7678   1.281   0.2291
+x             0.5131     0.2762   1.858   0.0929 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 40.85 on 10 degrees of freedom
+Multiple R-squared:  0.2566,	Adjusted R-squared:  0.1822
+F-statistic: 3.451 on 1 and 10 DF,  p-value: 0.09285
+#+end_example
+
+#+begin_src R :session 28_10_2024 :results output
+  cor.test(x,y)
+#+end_src
+
+#+RESULTS:
+
+*** b
+#+begin_example
+
+    Pearson's product-moment correlation
+
+data:  x and y
+t = 1.8578, df = 10, p-value = 0.09285
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.09496959  0.83709476
+sample estimates:
+      cor
+0.5065401
+#+end_example
+
+*** c
+#+begin_src R :session 28_10_2024 :results output
+  predict(model, new=data.frame(x=c(150)), interval='confidence', level=0.99)
+#+end_src
+
+#+RESULTS:
+:        fit     lwr      upr
+: 1 127.9143 88.9702 166.8584
+
+*** d
+#+begin_src R :session 28_10_2024 :results output
+  2*(1-pt(abs(-1.76), 12-2))
+#+end_src
+
+#+RESULTS:
+: [1] 0.1089037
+
+*** e
+#+begin_src R :session 28_10_2024 :results output
+  y1 <- 1/y
+  model_02 <- lm(y1~x)
+  summary(model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = y1 ~ x)
+
+Residuals:
+      Min        1Q    Median        3Q       Max
+-0.008368 -0.006085 -0.001544  0.004730  0.016921
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  0.0280118  0.0074719   3.749  0.00379 **
+x           -0.0001229  0.0000519  -2.368  0.03938 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.007676 on 10 degrees of freedom
+Multiple R-squared:  0.3594,	Adjusted R-squared:  0.2953
+F-statistic: 5.609 on 1 and 10 DF,  p-value: 0.03938
+#+end_example
+
+** 2
+*** a
+#+begin_src R :session 28_10_2024 :results output
+  beta1 = 0.725*(4.64/7.8)
+  beta0 = 14.97 - (beta1*49.36)
+  beta0 + beta1*50
+#+end_src
+
+#+RESULTS:
+: [1] 15.24602
+
+*** b
+#+begin_src R :session 28_10_2024 :results output
+  1-pf(abs(31.02),1,28)
+#+end_src
+
+#+RESULTS:
+: [1] 5.863114e-06
+
+*** c
+#+begin_src R :results output
+
+#+end_src
+
+* 04_11_2024
+#+begin_src R :results output
+  y <- c(6,5,10,12,14)
+  x1 <- c(1,1,3,5,3)
+  x2 <- c(1,2,1,1,2)
+  model_01 <- lm(y~x1+x2)
+  model_02 <- lm(y~x1*x2)
+  model_02 <- lm(y~x1+x2+x1*x2) # same as above
+  model_02 <- lm(y~x1+I(x1^2)) # we must use the I(...) because it's the same variable
+  summary(model_01)
+  summary(model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = y ~ x1 + x2)
+
+Residuals:
+      1       2       3       4       5
+ 0.8667 -2.4000  0.6667 -1.5333  2.4000
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   0.7667     5.0857   0.151    0.894
+x1            2.1000     0.8679   2.420    0.137
+x2            2.2667     2.6516   0.855    0.483
+
+Residual standard error: 2.745 on 2 degrees of freedom
+Multiple R-squared:  0.7455,	Adjusted R-squared:  0.491
+F-statistic: 2.929 on 2 and 2 DF,  p-value: 0.2545
+
+
+Call:
+lm(formula = y ~ x1 * x2)
+
+Residuals:
+         1          2          3          4          5
+-3.333e-01 -4.163e-17  6.667e-01 -3.333e-01 -1.388e-17
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   9.1667     2.3570   3.889    0.160
+x1           -1.5000     0.8165  -1.837    0.317
+x2           -4.3333     1.6245  -2.668    0.228
+x1:x2         3.0000     0.6455   4.648    0.135
+
+Residual standard error: 0.8165 on 1 degrees of freedom
+Multiple R-squared:  0.9887,	Adjusted R-squared:  0.955
+F-statistic: 29.27 on 3 and 1 DF,  p-value: 0.1349
+
+#+end_example
+
+* 06_11_2024
+** Create model - check betas
+#+begin_src R :session 06_11_2024 :results output
+  y <- c(6,5,10,12,14)
+  x1 <- c(1,1,3,5,3)
+  x2 <- c(1,2,1,1,2)
+  model <- lm(y~x1+x2)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = y ~ x1 + x2)
+
+Residuals:
+      1       2       3       4       5
+ 0.8667 -2.4000  0.6667 -1.5333  2.4000
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   0.7667     5.0857   0.151    0.894
+x1            2.1000     0.8679   2.420    0.137
+x2            2.2667     2.6516   0.855    0.483
+
+Residual standard error: 2.745 on 2 degrees of freedom
+Multiple R-squared:  0.7455,	Adjusted R-squared:  0.491
+F-statistic: 2.929 on 2 and 2 DF,  p-value: 0.2545
+#+end_example
+
+** Create matrix
+#+begin_src R :session 06_11_2024 :results output
+  one <- rep(1,5)
+  X <- matrix(c(one,x1,x2), ncol=3)
+  beta <- solve (t(X)%*%X)%*%t(X)%*%y # \hat{\beta}=(X^T)^{-1}X^Ty
+  beta
+  X
+#+end_src
+
+#+RESULTS:
+#+begin_example
+          [,1]
+[1,] 0.7666667
+[2,] 2.1000000
+[3,] 2.2666667
+     [,1] [,2] [,3]
+[1,]    1    1    1
+[2,]    1    1    2
+[3,]    1    3    1
+[4,]    1    5    1
+[5,]    1    3    2
+#+end_example
+
+** Valores estimados usando matrizes
+#+begin_src R :session 06_11_2024 :results output
+  fitted(model)
+  solve(t(X)%*%X)%*%t(X)%*%y
+  X%*%(beta) # same as above
+#+end_src
+
+#+RESULTS:
+#+begin_example
+        1         2         3         4         5
+ 5.133333  7.400000  9.333333 13.533333 11.600000
+          [,1]
+[1,] 0.7666667
+[2,] 2.1000000
+[3,] 2.2666667
+          [,1]
+[1,]  5.133333
+[2,]  7.400000
+[3,]  9.333333
+[4,] 13.533333
+[5,] 11.600000
+#+end_example
+
+** Residuals
+#+begin_src R :session 06_11_2024 :results output
+  e <- y - x%*%(solve(t(X)%*%X)%*%t(X)%*%y)
+  e <- y - x%*%beta # same as above
+  e_1 <- residuals(model)
+  e
+  e_1
+#+end_src
+
+#+RESULTS:
+:            [,1]
+: [1,]  0.8666667
+: [2,] -2.4000000
+: [3,]  0.6666667
+: [4,] -1.5333333
+: [5,]  2.4000000
+:          1          2          3          4          5
+:  0.8666667 -2.4000000  0.6666667 -1.5333333  2.4000000
+** Det of matrix
+#+begin_src R :session 06_11_2024 :results output
+  one <- rep(1,3)
+  x1 <- c(2,2,2)
+  x2 <- c(4,5,6)
+  X <- matrix(c(one,x1,x2), ncol=3)
+  det(X) # det 0 means it is linearly dependent - col 2 (2,2,2) is linear combination of col 1 (1,1,1)
+
+  new_x1 <- c(2,2,4)
+  new_X <- matrix(c(one,new_x1,x2), ncol=3)
+  det(new_X) # det != 0 means linearly independent
+#+end_src
+
+#+RESULTS:
+: [1] 0
+: [1] -2
+
+** Beta variance matrix
+#+begin_src R :session 06_11_2024 :results output
+  vcov(model)
+  confint(model) # confidence interval
+#+end_src
+
+#+RESULTS:
+:             (Intercept)         x1          x2
+: (Intercept)   25.864444 -3.0133333 -11.8022222
+: x1            -3.013333  0.7533333   0.7533333
+: x2           -11.802222  0.7533333   7.0311111
+:                  2.5 %    97.5 %
+: (Intercept) -21.115377 22.648710
+: x1           -1.634478  5.834478
+: x2           -9.142352 13.675685
+
+** Exercise
+#+begin_src R :session 06_11_2024_sess02 :results output
+  library(faraway)
+  data(savings)
+  names(savings)
+
+  cor(savings) # Pearson correlation matrix
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] "sr"    "pop15" "pop75" "dpi"   "ddpi"
+              sr       pop15       pop75        dpi        ddpi
+sr     1.0000000 -0.45553809  0.31652112  0.2203589  0.30478716
+pop15 -0.4555381  1.00000000 -0.90847871 -0.7561881 -0.04782569
+pop75  0.3165211 -0.90847871  1.00000000  0.7869995  0.02532138
+dpi    0.2203589 -0.75618810  0.78699951  1.0000000 -0.12948552
+ddpi   0.3047872 -0.04782569  0.02532138 -0.1294855  1.00000000
+       sr             pop15           pop75            dpi               ddpi
+ Min.   : 0.600   Min.   :21.44   Min.   :0.560   Min.   :  88.94   Min.   : 0.220
+ 1st Qu.: 6.970   1st Qu.:26.21   1st Qu.:1.125   1st Qu.: 288.21   1st Qu.: 2.002
+ Median :10.510   Median :32.58   Median :2.175   Median : 695.66   Median : 3.000
+ Mean   : 9.671   Mean   :35.09   Mean   :2.293   Mean   :1106.76   Mean   : 3.758
+ 3rd Qu.:12.617   3rd Qu.:44.06   3rd Qu.:3.325   3rd Qu.:1795.62   3rd Qu.: 4.478
+ Max.   :21.100   Max.   :47.64   Max.   :4.700   Max.   :4001.89   Max.   :16.710
+#+end_example
+
+* 11_11_2024
+** a)
+#+begin_src R :session 11_11_2024 :results output
+  library(faraway)
+  data(savings)
+  model <- lm(sr~., data=savings)
+  sigma_squared <- 3.803^2
+  X <- model.matrix(model)
+  vcov_matrix <- sigma_squared*(solve(t(X)%*%X))
+  vcov(model)
+  vcov_matrix
+  cor(savings) # correlation matrix
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+             (Intercept)         pop15         pop75           dpi          ddpi
+(Intercept) 54.088907156 -1.046928e+00 -6.4480864740 -1.135929e-03 -2.716546e-01
+pop15       -1.046927609  2.092137e-02  0.1199574165  2.422953e-05  2.907814e-03
+pop75       -6.448086474  1.199574e-01  1.1741866426 -3.703298e-04 -1.163392e-02
+dpi         -0.001135929  2.422953e-05 -0.0003703298  8.669606e-07  4.667202e-05
+ddpi        -0.271654582  2.907814e-03 -0.0116339234  4.667202e-05  3.849331e-02
+             (Intercept)         pop15         pop75           dpi          ddpi
+(Intercept) 54.098333818 -1.047110e+00 -6.4492102522 -1.136127e-03 -2.717019e-01
+pop15       -1.047110068  2.092502e-02  0.1199783228  2.423375e-05  2.908321e-03
+pop75       -6.449210252  1.199783e-01  1.1743912809 -3.703944e-04 -1.163595e-02
+dpi         -0.001136127  2.423375e-05 -0.0003703944  8.671117e-07  4.668016e-05
+ddpi        -0.271701926  2.908321e-03 -0.0116359510  4.668016e-05  3.850002e-02
+              sr       pop15       pop75        dpi        ddpi
+sr     1.0000000 -0.45553809  0.31652112  0.2203589  0.30478716
+pop15 -0.4555381  1.00000000 -0.90847871 -0.7561881 -0.04782569
+pop75  0.3165211 -0.90847871  1.00000000  0.7869995  0.02532138
+dpi    0.2203589 -0.75618810  0.78699951  1.0000000 -0.12948552
+ddpi   0.3047872 -0.04782569  0.02532138 -0.1294855  1.00000000
+#+end_example
+
+** b)
+#+begin_src R :session 11_11_2024 :file generated_graphs/11_11_2024.png :results graphics file
+  plot(savings)
+  # exemplo comentário: relação negativa forte entre pop75 e pop15
+  # exemplo comentário: não se observa uma relação linear entre as variáveis sr e pop75
+#+end_src
+
+#+RESULTS:
+[[file:generated_graphs/11_11_2024.png]]
+
+** c)
+#+begin_src R :session 11_11_2024 :results output
+  model <- lm(sr~pop15+pop75+dpi+ddpi, data=savings)
+  model <- lm(sr~., data=savings) # alternative, same as above
+  model_02 <- lm(sr~.-pop15, data=savings) # not part of exercise - just to show you can use all except one(in this case the pop15 variable)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+*** nota para adaptar modelo (seleção das variáveis explicativas) - retirar as variáveis com maior p-valor, pois se o seu p-valor é superio a 0.05, então não rejeitamos H_0: Beta = 0, ou seja, a variável será igual a zero e não tem significância
+#+begin_src R :session 11_11_2024 :results output
+  summary(model) # var mais significativa é dpi
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+*** retirar dpi
+#+begin_src R :session 11_11_2024 :results output
+  model_03 <- lm(sr~.-dpi, data=savings)
+  summary(model_03) # agora a var mais significativa é p75
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ . - dpi, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2539 -2.6159 -0.3913  2.3344  9.7070
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  28.1247     7.1838   3.915 0.000297 ***
+pop15        -0.4518     0.1409  -3.206 0.002452 **
+pop75        -1.8354     0.9984  -1.838 0.072473 .
+ddpi          0.4278     0.1879   2.277 0.027478 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.767 on 46 degrees of freedom
+Multiple R-squared:  0.3365,	Adjusted R-squared:  0.2933
+F-statistic: 7.778 on 3 and 46 DF,  p-value: 0.0002646
+#+end_example
+
+*** retirar pop75
+#+begin_src R :session 11_11_2024 :results output
+  model_04 <- lm(sr~.-dpi-pop75, data=savings)
+  summary(model_04)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ . - dpi - pop75, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.5831 -2.8632  0.0453  2.2273 10.4753
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.59958    2.33439   6.682 2.48e-08 ***
+pop15       -0.21638    0.06033  -3.586 0.000796 ***
+ddpi         0.44283    0.19240   2.302 0.025837 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.861 on 47 degrees of freedom
+Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
+F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
+#+end_example
+
+** d)
+#+begin_src R :session 11_11_2024 :results output
+  summary(model) # resposta: beta_3 = 0.00033
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+
+** e)
+#+begin_src R :session 11_11_2024 :results output
+  summary(model) # ANOVA table or see last line in summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+
+*** ANOVA table
+#+begin_src R :session 11_11_2024 :results output
+  anova(model)
+  1-pf(abs(5.756), 4, 45)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Response: sr
+          Df Sum Sq Mean Sq F value    Pr(>F)
+pop15      1 204.12 204.118 14.1157 0.0004922 ***
+pop75      1  53.34  53.343  3.6889 0.0611255 .
+dpi        1  12.40  12.401  0.8576 0.3593551
+ddpi       1  63.05  63.054  4.3605 0.0424711 *
+Residuals 45 650.71  14.460
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] 0.0007900702
+#+end_example
+
+** f) IC para pop75
+#+begin_src R :session 11_11_2024 :results output
+  confint(model) # -3.873977955,  0.490982602
+#+end_src
+
+#+RESULTS:
+:                    2.5 %       97.5 %
+: (Intercept) 13.753330728 43.378842354
+: pop15       -0.752517542 -0.169868752
+: pop75       -3.873977955  0.490982602
+: dpi         -0.002212248  0.001538444
+: ddpi         0.014533628  0.804856227
+
+** g) Variância dos erros
+#+begin_src R :session 11_11_2024 :results output
+  summary(model) # Residual standard error squared -> 3.803^2 = 14.462809
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+
+** h)
+#+begin_src R :session 11_11_2024 :results output
+  predict(model, new=data.frame(pop15=25,pop75=4,dpi=1000,ddpi=4), interval='prediction')
+#+end_src
+
+#+RESULTS:
+:        fit      lwr      upr
+: 1 11.57214 3.430158 19.71413
+
+** matriz das covariâncias
+#+begin_src R :session 11_11_2024 :results output
+  vcov(model)
+  # variância do beta_0 = 54.088907156; variância do beta_1 = 2.092137e-02;
+  # as variâncias são o quadrado do STD.ERROR obtido no summary(model)
+#+end_src
+
+#+RESULTS:
+:              (Intercept)         pop15         pop75           dpi          ddpi
+: (Intercept) 54.088907156 -1.046928e+00 -6.4480864740 -1.135929e-03 -2.716546e-01
+: pop15       -1.046927609  2.092137e-02  0.1199574165  2.422953e-05  2.907814e-03
+: pop75       -6.448086474  1.199574e-01  1.1741866426 -3.703298e-04 -1.163392e-02
+: dpi         -0.001135929  2.422953e-05 -0.0003703298  8.669606e-07  4.667202e-05
+: ddpi        -0.271654582  2.907814e-03 -0.0116339234  4.667202e-05  3.849331e-02
+
+** matriz das covariâncias
+#+begin_src R :session 11_11_2024 :results output
+  X <- model.matrix(model)
+  var_hat <- 3.803^2
+  XtX <- (t(X)%*%X)
+  inv_XtX <- solve(XtX)
+  cov_matrix <- var_hat*inv_XtX
+  cov_matrix
+#+end_src
+
+#+RESULTS:
+:              (Intercept)         pop15         pop75           dpi          ddpi
+: (Intercept) 54.098333818 -1.047110e+00 -6.4492102522 -1.136127e-03 -2.717019e-01
+: pop15       -1.047110068  2.092502e-02  0.1199783228  2.423375e-05  2.908321e-03
+: pop75       -6.449210252  1.199783e-01  1.1743912809 -3.703944e-04 -1.163595e-02
+: dpi         -0.001136127  2.423375e-05 -0.0003703944  8.671117e-07  4.668016e-05
+: ddpi        -0.271701926  2.908321e-03 -0.0116359510  4.668016e-05  3.850002e-02
+
+* 13_11_2034
+#+begin_src R :session 13_11_2024 :results output
+  model_H0 <- lm(sr~pop15, data=savings)
+  model_H1 <- lm(sr~., data=savings)
+  result = anova(model_H0, model_H1)
+  result
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: sr ~ pop15
+: Model 2: sr ~ pop15 + pop75 + dpi + ddpi
+:   Res.Df    RSS Df Sum of Sq     F  Pr(>F)
+: 1     48 779.51
+: 2     45 650.71  3     128.8 2.969 0.04177 *
+: ---
+: Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#+begin_src R :session 13_11_2024 :results output
+  summary(model_H0)
+  # H_0's SSE is 779.51
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ pop15, data = savings)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-8.637 -2.374  0.349  2.022 11.155
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 17.49660    2.27972   7.675 6.85e-10 ***
+pop15       -0.22302    0.06291  -3.545 0.000887 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.03 on 48 degrees of freedom
+Multiple R-squared:  0.2075,	Adjusted R-squared:  0.191
+F-statistic: 12.57 on 1 and 48 DF,  p-value: 0.0008866
+#+end_example
+
+#+begin_src R :session 13_11_2024 :results output
+  summary(model_H1)
+  # sigma_squared = SSE/n-p-1 <=> SSE = sigma_squared*n-p-1 <=> SSE = 3.803^2*(50-4-1)
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+
+#+begin_src R :session 13_11_2024 :results output
+  1-pf(2.969, 3, 45)
+#+end_src
+
+#+RESULTS:
+: [1] 0.0417708
+
+** questao aula
+#+begin_src R :session 13_11_2024 :results output
+  model_03 <- lm(sr~pop15+pop75, data=savings)
+  model_04 <- lm(sr~., data=savings)
+#+end_src
+
+#+RESULTS:
+
+*** model_03
+#+begin_src R :session 13_11_2024 :results output
+  summary(model_03)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ pop15 + pop75, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.7246 -2.7036 -0.1198  2.2825 10.3211
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  30.6277     7.4085   4.134 0.000146 ***
+pop15        -0.4708     0.1468  -3.207 0.002414 **
+pop75        -1.9341     1.0409  -1.858 0.069425 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.931 on 47 degrees of freedom
+Multiple R-squared:  0.2617,	Adjusted R-squared:  0.2303
+F-statistic: 8.332 on 2 and 47 DF,  p-value: 0.0007995
+#+end_example
+
+*** model_04
+#+begin_src R :session 13_11_2024 :results output
+  summary(model_04)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ., data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2422 -2.6857 -0.2488  2.4280  9.7509
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 28.5660865  7.3545161   3.884 0.000334 ***
+pop15       -0.4611931  0.1446422  -3.189 0.002603 **
+pop75       -1.6914977  1.0835989  -1.561 0.125530
+dpi         -0.0003369  0.0009311  -0.362 0.719173
+ddpi         0.4096949  0.1961971   2.088 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.803 on 45 degrees of freedom
+Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
+F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
+#+end_example
+
+*** anova
+#+begin_src R :session 13_11_2024 :results output
+  anova(model_03,model_04)
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: sr ~ pop15 + pop75
+: Model 2: sr ~ pop15 + pop75 + dpi + ddpi
+:   Res.Df    RSS Df Sum of Sq     F  Pr(>F)
+: 1     47 726.17
+: 2     45 650.71  2    75.455 2.609 0.08471 .
+: ---
+: Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+* 18_11_2024
+** exercicioaula.pdf — exercício 2: Na resolução das seguintes questões considere o modelo de regressão linear de sr em função de pop15 e ddpi.
+*** a) Obtenha as estimativas dos coeficientes de regressão e construa a equação do modelo de regressão linear múltipla (MRLM) estimado.
+#+begin_src R :session 18_11_2024 :results output
+  library(faraway)
+  data(savings)
+  model <- lm(sr~ddpi+pop15, data=savings)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ddpi + pop15, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.5831 -2.8632  0.0453  2.2273 10.4753
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.59958    2.33439   6.682 2.48e-08 ***
+ddpi         0.44283    0.19240   2.302 0.025837 *
+pop15       -0.21638    0.06033  -3.586 0.000796 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.861 on 47 degrees of freedom
+Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
+F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
+#+end_example
+*** b) Obtenha os valores ajustados das observações e dos resíduos (estandardizados e não estandardizados).
+#+begin_src R :session 18_11_2024 :results output
+  fitted(model)
+  fitted(model)[1]
+  residuals(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+     Australia        Austria        Belgium        Bolivia         Brazil         Canada
+     10.519857      12.294005      12.141433       6.632999       8.489969       9.812200
+         Chile          China       Colombia     Costa Rica        Denmark        Ecuador
+      8.183142       8.799565       6.871707       6.531338      12.082561       6.548992
+       Finland         France        Germany         Greece      Guatamala       Honduras
+     11.488689      12.178780      12.079182      12.836991       6.290840       6.773282
+       Iceland          India        Ireland          Italy          Japan          Korea
+      8.732263       7.343033      10.181355      11.861650      13.390890       9.140876
+    Luxembourg          Malta         Norway    Netherlands    New Zealand      Nicaragua
+     11.577818      12.154475      11.587659      13.644999       9.322929       6.952210
+        Panama       Paraguay           Peru    Philippines       Portugal   South Africa
+      7.772845       7.145319       6.334608       6.475673      12.645691       9.658318
+South Rhodesia          Spain         Sweden    Switzerland         Turkey        Tunisia
+      9.578508      11.523611      12.293389      11.712540       7.515298       6.120703
+United Kingdom  United States      Venezuela         Zambia        Jamaica        Uruguay
+     11.454590      10.234335       5.794420       8.084700      11.232339      10.345434
+         Libya       Malaysia
+     13.545792       7.636196
+Australia
+ 10.51986
+     Australia        Austria        Belgium        Bolivia         Brazil         Canada
+     0.9101432     -0.2240053      1.0285666     -0.8829993      4.3900307     -1.0221999
+         Chile          China       Colombia     Costa Rica        Denmark        Ecuador
+    -7.5831420      3.1004349     -1.8917066      4.2486621      4.7674387     -2.9589919
+       Finland         France        Germany         Greece      Guatamala       Honduras
+    -0.2486886      0.4612195      0.4708177     -2.1669909     -3.2808403      0.9267179
+       Iceland          India        Ireland          Italy          Japan          Korea
+    -7.4622634      1.6569667      1.1586445      2.4183499      7.7091098     -5.1608763
+    Luxembourg          Malta         Norway    Netherlands    New Zealand      Nicaragua
+    -1.2278179      3.3255249     -1.3376585      1.0050011      1.3470711      0.3477896
+        Panama       Paraguay           Peru    Philippines       Portugal   South Africa
+    -3.3328453     -5.1253188      6.3653924      6.3043270     -0.1556906      1.4816821
+South Rhodesia          Spain         Sweden    Switzerland         Turkey        Tunisia
+     3.7214923      0.2463889     -5.4333888      2.4174598     -2.3852983     -3.3107034
+United Kingdom  United States      Venezuela         Zambia        Jamaica        Uruguay
+    -3.6445902     -2.6743351      3.4255800     10.4753003     -3.5123389     -1.1054339
+         Libya       Malaysia
+    -4.6557915     -2.9261962
+#+end_example
+
+#+begin_src R :session 18_11_2024 :results output
+  residuals(model) # non standardized
+  rstandard(model) # standardized
+  rstandard(model)[50] # value of last residual
+#+end_src
+
+#+RESULTS:
+#+begin_example
+     Australia        Austria        Belgium        Bolivia         Brazil         Canada          Chile          China       Colombia     Costa Rica
+     0.9101432     -0.2240053      1.0285666     -0.8829993      4.3900307     -1.0221999     -7.5831420      3.1004349     -1.8917066      4.2486621
+       Denmark        Ecuador        Finland         France        Germany         Greece      Guatamala       Honduras        Iceland          India
+     4.7674387     -2.9589919     -0.2486886      0.4612195      0.4708177     -2.1669909     -3.2808403      0.9267179     -7.4622634      1.6569667
+       Ireland          Italy          Japan          Korea     Luxembourg          Malta         Norway    Netherlands    New Zealand      Nicaragua
+     1.1586445      2.4183499      7.7091098     -5.1608763     -1.2278179      3.3255249     -1.3376585      1.0050011      1.3470711      0.3477896
+        Panama       Paraguay           Peru    Philippines       Portugal   South Africa South Rhodesia          Spain         Sweden    Switzerland
+    -3.3328453     -5.1253188      6.3653924      6.3043270     -0.1556906      1.4816821      3.7214923      0.2463889     -5.4333888      2.4174598
+        Turkey        Tunisia United Kingdom  United States      Venezuela         Zambia        Jamaica        Uruguay          Libya       Malaysia
+    -2.3852983     -3.3107034     -3.6445902     -2.6743351      3.4255800     10.4753003     -3.5123389     -1.1054339     -4.6557915     -2.9261962
+     Australia        Austria        Belgium        Bolivia         Brazil         Canada          Chile          China       Colombia     Costa Rica
+    0.23940769    -0.05964649     0.27349385    -0.23597170     1.15713326    -0.26848260    -1.99209336     0.82988475    -0.50354658     1.13496529
+       Denmark        Ecuador        Finland         France        Germany         Greece      Guatamala       Honduras        Iceland          India
+    1.26543230    -0.78864365    -0.06551530     0.12227429     0.12540994    -0.57767306    -0.87666515     0.24715983    -1.97041509     0.43817825
+       Ireland          Italy          Japan          Korea     Luxembourg          Malta         Norway    Netherlands    New Zealand      Nicaragua
+    0.30400379     0.64184783     2.08463124    -1.36594417    -0.33105896     0.89224937    -0.35372107     0.27155948     0.35459491     0.09229209
+        Panama       Paraguay           Peru    Philippines       Portugal   South Africa South Rhodesia          Spain         Sweden    Switzerland
+   -0.87991328    -1.35938816     1.70219151     1.68127521    -0.04163552     0.38944881     0.97899643     0.06492363    -1.45750540     0.64465772
+        Turkey        Tunisia United Kingdom  United States      Venezuela         Zambia        Jamaica        Uruguay          Libya       Malaysia
+   -0.62992877    -0.88669505    -0.97535786    -0.70389861     0.92225315     2.78524415    -0.97864598    -0.29246823    -1.64566546    -0.78231470
+ Denmark
+1.265432
+  Malaysia
+-0.7823147
+[1] 12
+#+end_example
+*** c) Teste o ajustamento global do modelo. Construir a tabela ANOVA.
+#+begin_src R :session 18_11_2024 :results output
+  summary(model) # We can get ET and P-value
+  sst <- var(savings$sr)*(49)
+  sst
+  sst_alternative <- sum((savings$sr-mean(savings$sr))^2)
+  sst_alternative
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ddpi + pop15, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.5831 -2.8632  0.0453  2.2273 10.4753
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.59958    2.33439   6.682 2.48e-08 ***
+ddpi         0.44283    0.19240   2.302 0.025837 *
+pop15       -0.21638    0.06033  -3.586 0.000796 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.861 on 47 degrees of freedom
+Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
+F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
+[1] 983.6282
+[1] 983.6283
+#+end_example
+
+**** anova
+#+begin_src R :session 18_11_2024 :results output
+  anova(model)
+  1-pf(9.496,2,47)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Response: sr
+          Df Sum Sq Mean Sq F value   Pr(>F)
+ddpi       1  91.37  91.374  6.1303 0.016947 *
+pop15      1 191.70 191.702 12.8613 0.000796 ***
+Residuals 47 700.55  14.905
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] 0.0003437592
+#+end_example
+*** d) Teste a significância individual de cada variável independente.
+#+begin_src R :session 18_11_2024 :results output
+  model_02 <- lm(sr~pop15, data=savings)
+  summary(model_02)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ pop15, data = savings)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-8.637 -2.374  0.349  2.022 11.155
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 17.49660    2.27972   7.675 6.85e-10 ***
+pop15       -0.22302    0.06291  -3.545 0.000887 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.03 on 48 degrees of freedom
+Multiple R-squared:  0.2075,	Adjusted R-squared:  0.191
+F-statistic: 12.57 on 1 and 48 DF,  p-value: 0.0008866
+
+Call:
+lm(formula = sr ~ ddpi + pop15, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.5831 -2.8632  0.0453  2.2273 10.4753
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.59958    2.33439   6.682 2.48e-08 ***
+ddpi         0.44283    0.19240   2.302 0.025837 *
+pop15       -0.21638    0.06033  -3.586 0.000796 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.861 on 47 degrees of freedom
+Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
+F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
+#+end_example
+
+*** e) Interprete o valor do coeficiente de determinação.
+
+*** f) Admitindo a validade do modelo, teste, com um nível de significância de 1%, a hipótese de que, aumentando 1 ponto percentual a percentagem de população menor do que 15, (e sem alterar a outra variável explicativa) corresponde um aumento médio da variável resposta de 90.
+#+begin_src R :session 18_11_2024 :results output
+  summary(model)
+  ET <- (-0.21638 - 90)/(0.06033)
+  ET
+  2*(1-pt(abs(ET), 47))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ ddpi + pop15, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.5831 -2.8632  0.0453  2.2273 10.4753
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.59958    2.33439   6.682 2.48e-08 ***
+ddpi         0.44283    0.19240   2.302 0.025837 *
+pop15       -0.21638    0.06033  -3.586 0.000796 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.861 on 47 degrees of freedom
+Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
+F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
+[1] -1495.382
+[1] 0
+#+end_example
+
+
+*** g) Será admissível considerar que os coeficientes das duas variáveis explicativas são iguais? Justifique formalmente.
+#+begin_src R :session 18_11_2024 :results output
+  vcov(model)
+#+end_src
+
+#+RESULTS:
+:             (Intercept)          ddpi         pop15
+: (Intercept)   5.4493973 -0.1585810606 -0.1298221100
+: ddpi         -0.1585811  0.0370182787  0.0005551838
+: pop15        -0.1298221  0.0005551838  0.0036402795
+
+**** calcular ET
+#+begin_src R :session 18_11_2024 :results output
+  # ET <-
+#+end_src
+
+**** calcular p-value
+#+begin_src R :session 18_11_2024 :results output
+
+#+end_src
+
+*** h) Estime o valor médio sr cujo valores das variáveis explicativas no modelo anterior são (25, 4) e obtenha o intervalo de confiança associado.
+#+begin_src R :session 18_11_2024 :results output
+  predict(model, new=data.frame(pop15=25,ddpi=4), interval='confidence')
+#+end_src
+
+#+RESULTS:
+:        fit      lwr      upr
+: 1 11.96149 10.31709 13.60589
+
+
+** Questão aula: Considere os dados data(mtcars)
+*** 1 Obtenha as estimativas dos coeficientes de regressão e construa a equação do modelo de regressão linear múltipla (MRLM) estimado para prever a variável mpg (milhas por galão) em função de hp (potência do motor, em cavalos) e wt (peso do veículo, em milhares de libras).
+#+begin_src R :session 18_11_2024_2 :results output
+  data(mtcars)
+  model = lm(mpg~hp+wt, data=mtcars)
+  summary(model)
+  b_hat_0 = 37.22727
+  b_hat_1 = -0.03177
+  b_hat_2 = -3.87783
+  mpg_hat = 37.22727-0.03177*mtcars$hp-3.87783*mtcars$wt
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mpg ~ hp + wt, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-3.941 -1.600 -0.182  1.050  5.854
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
+hp          -0.03177    0.00903  -3.519  0.00145 **
+wt          -3.87783    0.63273  -6.129 1.12e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.593 on 29 degrees of freedom
+Multiple R-squared:  0.8268,	Adjusted R-squared:  0.8148
+F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
+#+end_example
+
+*** 2 Calcule os valores ajustados das primeiras 5 observações.
+#+begin_src R :session 18_11_2024_2 :results output
+  fit <- fitted(model)
+  fit[1:5]
+  mpg_hat[1:5] # alternative
+#+end_src
+
+#+RESULTS:
+:         Mazda RX4     Mazda RX4 Wag        Datsun 710    Hornet 4 Drive Hornet Sportabout
+:          23.57233          22.58348          25.27582          21.26502          18.32727
+: [1] 23.57266 22.58381 25.27609 21.26535 18.32778
+
+*** 3 Teste o ajustamento global do modelo através de uma análise de variância (ANOVA). Construa a tabela ANOVA e interprete os resultados para avaliar se o modelo linear múltiplo é adequado para prever mpg.
+#+begin_src R :session 18_11_2024_2 :results output
+  anova(model)
+  p_value <- 1-pf(69.21,2,29)
+  p_value
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Response: mpg
+          Df Sum Sq Mean Sq F value    Pr(>F)
+hp         1 678.37  678.37 100.862 5.987e-11 ***
+wt         1 252.63  252.63  37.561 1.120e-06 ***
+Residuals 29 195.05    6.73
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+[1] 9.110934e-12
+#+end_example
+
+*** 4 Determine o intervalo de previsão do ponto (min(hp),min(wt))
+#+begin_src R :session 18_11_2024_2 :results output
+  predict(model, new=data.frame(hp=c(min(mtcars$hp)),wt=c(min(mtcars$wt))), interval='prediction')
+#+end_src
+
+#+RESULTS:
+:        fit      lwr      upr
+: 1 29.70792 24.06401 35.35183
+
+* 20_11_2024
+** backward
+#+begin_src R :session 20_11_2024 :results output
+  model <- lm(sr~., data=savings)
+#+end_src
+
+#+RESULTS:
+
+** forward
+#+begin_src R :session 20_11_2024 :results output
+  null_model <- lm(sr~1, data=savings)
+  step(null_model, direction='forward', scope=list(lower=null_model, upper=model))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Start:  AIC=150.96
+sr ~ 1
+
+        Df Sum of Sq    RSS    AIC
+pop15  1   204.118 779.51 141.33
+pop75  1    98.545 885.08 147.68
+ddpi   1    91.374 892.25 148.09
+dpi    1    47.763 935.87 150.47
+<none>               983.63 150.96
+
+Step:  AIC=141.33
+sr ~ pop15
+
+        Df Sum of Sq    RSS    AIC
+ddpi   1    78.959 700.55 137.99
+pop75  1    53.343 726.17 139.79
+dpi    1    35.387 744.12 141.01
+<none>               779.51 141.33
+
+Step:  AIC=137.99
+sr ~ pop15 + ddpi
+
+        Df Sum of Sq    RSS    AIC
+pop75  1    47.946 652.61 136.45
+<none>               700.55 137.99
+dpi    1    14.603 685.95 138.94
+
+Step:  AIC=136.45
+sr ~ pop15 + ddpi + pop75
+
+       Df Sum of Sq    RSS    AIC
+<none>              652.61 136.45
+dpi   1    1.8932 650.71 138.30
+
+Call:
+lm(formula = sr ~ pop15 + ddpi + pop75, data = savings)
+
+Coefficients:
+(Intercept)        pop15         ddpi        pop75
+    28.1247      -0.4518       0.4278      -1.8354
+#+end_example
+
+** stepwise
+#+begin_src R :session 20_11_2024 :results output
+
+
+#+end_src
+
+** drop1 (statistical test)
+*** first step
+#+begin_src R :session 20_11_2024 :results output
+  drop1(model, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+sr ~ pop15 + pop75 + dpi + ddpi
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              650.71 138.30
+pop15   1   147.012 797.72 146.49 10.1666 0.002603 **
+pop75   1    35.236 685.95 138.94  2.4367 0.125530
+dpi     1     1.893 652.61 136.45  0.1309 0.719173
+ddpi    1    63.054 713.77 140.93  4.3605 0.042471 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+*** second step
+#+begin_src R :session 20_11_2024 :results output
+  model_01 <- lm(sr~.-dpi, data=savings)
+  drop1(model_01, test='F')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+sr ~ (pop15 + pop75 + dpi + ddpi) - dpi
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              652.61 136.45
+pop15   1   145.789 798.40 144.53 10.2762 0.002452 **
+pop75   1    47.946 700.55 137.99  3.3795 0.072473 .
+ddpi    1    73.562 726.17 139.79  5.1851 0.027478 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+*** third step
+#+begin_src R :session 20_11_2024 :results output
+  model_02 <- lm(sr~.-dpi-pop75, data=savings)
+  drop1(model_02, test='F')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+sr ~ (pop15 + pop75 + dpi + ddpi) - dpi - pop75
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              700.55 137.99
+pop15   1   191.702 892.25 148.09 12.8613 0.000796 ***
+ddpi    1    78.959 779.51 141.33  5.2973 0.025837 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+*** avaliar qual model usar
+#+begin_src R :session 20_11_2024 :results output
+  summary(model_01)
+  summary(model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = sr ~ . - dpi, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-8.2539 -2.6159 -0.3913  2.3344  9.7070
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  28.1247     7.1838   3.915 0.000297 ***
+pop15        -0.4518     0.1409  -3.206 0.002452 **
+pop75        -1.8354     0.9984  -1.838 0.072473 .
+ddpi          0.4278     0.1879   2.277 0.027478 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.767 on 46 degrees of freedom
+Multiple R-squared:  0.3365,	Adjusted R-squared:  0.2933
+F-statistic: 7.778 on 3 and 46 DF,  p-value: 0.0002646
+
+Call:
+lm(formula = sr ~ . - dpi - pop75, data = savings)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.5831 -2.8632  0.0453  2.2273 10.4753
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 15.59958    2.33439   6.682 2.48e-08 ***
+pop15       -0.21638    0.06033  -3.586 0.000796 ***
+ddpi         0.44283    0.19240   2.302 0.025837 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.861 on 47 degrees of freedom
+Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
+F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
+#+end_example
+
+** add (statistical test)
+*** first step
+#+begin_src R :session 20_11_2024_02 :results output
+  model <- lm(sr~., data=savings)
+  null_model <- lm(sr~1, data=savings)
+  add1(null_model, model, test='F')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term additions
+
+Model:
+sr ~ 1
+       Df Sum of Sq    RSS    AIC F value    Pr(>F)
+<none>              983.63 150.96
+pop15   1   204.118 779.51 141.33 12.5690 0.0008866 ***
+pop75   1    98.545 885.08 147.68  5.3443 0.0251262 *
+dpi     1    47.763 935.87 150.47  2.4497 0.1241139
+ddpi    1    91.374 892.25 148.09  4.9156 0.0313851 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+*** second step
+#+begin_src R :session 20_11_2024_02 :results output
+  model_01 <- lm(sr~pop15, data=savings)
+  add1(model_01, model, test='F')
+#+end_src
+
+#+RESULTS:
+: Single term additions
+:
+: Model:
+: sr ~ (pop15 + pop75 + dpi + ddpi) - pop15
+:        Df Sum of Sq    RSS    AIC F value   Pr(>F)
+: <none>              797.72 146.49
+: pop15   1    147.01 650.71 138.30  10.167 0.002603 **
+: ---
+: Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+*** third step
+#+begin_src R :session 20_11_2024_02 :results output
+  model_02 <- lm(sr~pop15+ddpi, data=savings)
+  add1(model_02, model, test='F')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term additions
+
+Model:
+sr ~ pop15 + ddpi
+       Df Sum of Sq    RSS    AIC F value  Pr(>F)
+<none>              700.55 137.99
+pop75   1    47.946 652.61 136.45  3.3795 0.07247 .
+dpi     1    14.603 685.95 138.94  0.9793 0.32755
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+** picking variables — another method
+#+begin_src R :session 20_11_2024_02 :results output
+  library(leaps)
+  leaps(y=savings$sr, x=savings[,-1], method='adjr2', nbest=4) # In x=savings[,-1] the -1 removes the Y
+#+end_src
+
+#+RESULTS:
+#+begin_example
+$which
+      1     2     3     4
+1  TRUE FALSE FALSE FALSE
+1 FALSE  TRUE FALSE FALSE
+1 FALSE FALSE FALSE  TRUE
+1 FALSE FALSE  TRUE FALSE
+2  TRUE FALSE FALSE  TRUE
+2  TRUE  TRUE FALSE FALSE
+2  TRUE FALSE  TRUE FALSE
+2 FALSE  TRUE FALSE  TRUE
+3  TRUE  TRUE FALSE  TRUE
+3  TRUE FALSE  TRUE  TRUE
+3  TRUE  TRUE  TRUE FALSE
+3 FALSE  TRUE  TRUE  TRUE
+4  TRUE  TRUE  TRUE  TRUE
+
+$label
+[1] "(Intercept)" "1"           "2"           "3"           "4"
+
+$size
+ [1] 2 2 2 2 3 3 3 3 4 4 4 4 5
+
+$adjr2
+ [1] 0.19100484 0.08143949 0.07399720 0.02873635 0.25748108 0.23033042 0.21129905 0.15377624 0.29326205 0.25715385 0.22702804 0.13610612 0.27965250
+#+end_example
+
+** slide exercise
+*** a) Ajuste um modelo de regressão linear múltipla da variável mpg sobre as restantes variáveis explicativas usandos o método backward, critério AIC.
+**** Critério AIC backward
+#+begin_src R :session 20_11_2024_03 :results output
+  null_model <- lm(mpg~1, data=mtcars)
+  data(mtcars)
+  model <- lm(mpg~., data=mtcars)
+  step(model, direction='backward', scope=list(lower=null_model, upper=model))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Start:  AIC=70.9
+mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb
+
+       Df Sum of Sq    RSS    AIC
+- cyl   1    0.0799 147.57 68.915
+- vs    1    0.1601 147.66 68.932
+- carb  1    0.4067 147.90 68.986
+- gear  1    1.3531 148.85 69.190
+- drat  1    1.6270 149.12 69.249
+- disp  1    3.9167 151.41 69.736
+- hp    1    6.8399 154.33 70.348
+- qsec  1    8.8641 156.36 70.765
+<none>              147.49 70.898
+- am    1   10.5467 158.04 71.108
+- wt    1   27.0144 174.51 74.280
+
+Step:  AIC=68.92
+mpg ~ disp + hp + drat + wt + qsec + vs + am + gear + carb
+
+       Df Sum of Sq    RSS    AIC
+- vs    1    0.2685 147.84 66.973
+- carb  1    0.5201 148.09 67.028
+- gear  1    1.8211 149.40 67.308
+- drat  1    1.9826 149.56 67.342
+- disp  1    3.9009 151.47 67.750
+- hp    1    7.3632 154.94 68.473
+<none>              147.57 68.915
+- qsec  1   10.0933 157.67 69.032
+- am    1   11.8359 159.41 69.384
+- wt    1   27.0280 174.60 72.297
+
+Step:  AIC=66.97
+mpg ~ disp + hp + drat + wt + qsec + am + gear + carb
+
+       Df Sum of Sq    RSS    AIC
+- carb  1    0.6855 148.53 65.121
+- gear  1    2.1437 149.99 65.434
+- drat  1    2.2139 150.06 65.449
+- disp  1    3.6467 151.49 65.753
+- hp    1    7.1060 154.95 66.475
+<none>              147.84 66.973
+- am    1   11.5694 159.41 67.384
+- qsec  1   15.6830 163.53 68.200
+- wt    1   27.3799 175.22 70.410
+
+Step:  AIC=65.12
+mpg ~ disp + hp + drat + wt + qsec + am + gear
+
+       Df Sum of Sq    RSS    AIC
+- gear  1     1.565 150.09 63.457
+- drat  1     1.932 150.46 63.535
+<none>              148.53 65.121
+- disp  1    10.110 158.64 65.229
+- am    1    12.323 160.85 65.672
+- hp    1    14.826 163.35 66.166
+- qsec  1    26.408 174.94 68.358
+- wt    1    69.127 217.66 75.350
+
+Step:  AIC=63.46
+mpg ~ disp + hp + drat + wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+- drat  1     3.345 153.44 62.162
+- disp  1     8.545 158.64 63.229
+<none>              150.09 63.457
+- hp    1    13.285 163.38 64.171
+- am    1    20.036 170.13 65.466
+- qsec  1    25.574 175.67 66.491
+- wt    1    67.572 217.66 73.351
+
+Step:  AIC=62.16
+mpg ~ disp + hp + wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+- disp  1     6.629 160.07 61.515
+<none>              153.44 62.162
+- hp    1    12.572 166.01 62.682
+- qsec  1    26.470 179.91 65.255
+- am    1    32.198 185.63 66.258
+- wt    1    69.043 222.48 72.051
+
+Step:  AIC=61.52
+mpg ~ hp + wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+- hp    1     9.219 169.29 61.307
+<none>              160.07 61.515
+- qsec  1    20.225 180.29 63.323
+- am    1    25.993 186.06 64.331
+- wt    1    78.494 238.56 72.284
+
+Step:  AIC=61.31
+mpg ~ wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+<none>              169.29 61.307
+- am    1    26.178 195.46 63.908
+- qsec  1   109.034 278.32 75.217
+- wt    1   183.347 352.63 82.790
+
+Call:
+lm(formula = mpg ~ wt + qsec + am, data = mtcars)
+
+Coefficients:
+(Intercept)           wt         qsec           am
+      9.618       -3.917        1.226        2.936
+#+end_example
+
+**** Critério AIC stepwise
+#+begin_src R :session 20_11_2024_03 :results output
+  step(model, method='both')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Start:  AIC=70.9
+mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb
+
+       Df Sum of Sq    RSS    AIC
+- cyl   1    0.0799 147.57 68.915
+- vs    1    0.1601 147.66 68.932
+- carb  1    0.4067 147.90 68.986
+- gear  1    1.3531 148.85 69.190
+- drat  1    1.6270 149.12 69.249
+- disp  1    3.9167 151.41 69.736
+- hp    1    6.8399 154.33 70.348
+- qsec  1    8.8641 156.36 70.765
+<none>              147.49 70.898
+- am    1   10.5467 158.04 71.108
+- wt    1   27.0144 174.51 74.280
+
+Step:  AIC=68.92
+mpg ~ disp + hp + drat + wt + qsec + vs + am + gear + carb
+
+       Df Sum of Sq    RSS    AIC
+- vs    1    0.2685 147.84 66.973
+- carb  1    0.5201 148.09 67.028
+- gear  1    1.8211 149.40 67.308
+- drat  1    1.9826 149.56 67.342
+- disp  1    3.9009 151.47 67.750
+- hp    1    7.3632 154.94 68.473
+<none>              147.57 68.915
+- qsec  1   10.0933 157.67 69.032
+- am    1   11.8359 159.41 69.384
+- wt    1   27.0280 174.60 72.297
+
+Step:  AIC=66.97
+mpg ~ disp + hp + drat + wt + qsec + am + gear + carb
+
+       Df Sum of Sq    RSS    AIC
+- carb  1    0.6855 148.53 65.121
+- gear  1    2.1437 149.99 65.434
+- drat  1    2.2139 150.06 65.449
+- disp  1    3.6467 151.49 65.753
+- hp    1    7.1060 154.95 66.475
+<none>              147.84 66.973
+- am    1   11.5694 159.41 67.384
+- qsec  1   15.6830 163.53 68.200
+- wt    1   27.3799 175.22 70.410
+
+Step:  AIC=65.12
+mpg ~ disp + hp + drat + wt + qsec + am + gear
+
+       Df Sum of Sq    RSS    AIC
+- gear  1     1.565 150.09 63.457
+- drat  1     1.932 150.46 63.535
+<none>              148.53 65.121
+- disp  1    10.110 158.64 65.229
+- am    1    12.323 160.85 65.672
+- hp    1    14.826 163.35 66.166
+- qsec  1    26.408 174.94 68.358
+- wt    1    69.127 217.66 75.350
+
+Step:  AIC=63.46
+mpg ~ disp + hp + drat + wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+- drat  1     3.345 153.44 62.162
+- disp  1     8.545 158.64 63.229
+<none>              150.09 63.457
+- hp    1    13.285 163.38 64.171
+- am    1    20.036 170.13 65.466
+- qsec  1    25.574 175.67 66.491
+- wt    1    67.572 217.66 73.351
+
+Step:  AIC=62.16
+mpg ~ disp + hp + wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+- disp  1     6.629 160.07 61.515
+<none>              153.44 62.162
+- hp    1    12.572 166.01 62.682
+- qsec  1    26.470 179.91 65.255
+- am    1    32.198 185.63 66.258
+- wt    1    69.043 222.48 72.051
+
+Step:  AIC=61.52
+mpg ~ hp + wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+- hp    1     9.219 169.29 61.307
+<none>              160.07 61.515
+- qsec  1    20.225 180.29 63.323
+- am    1    25.993 186.06 64.331
+- wt    1    78.494 238.56 72.284
+
+Step:  AIC=61.31
+mpg ~ wt + qsec + am
+
+       Df Sum of Sq    RSS    AIC
+<none>              169.29 61.307
+- am    1    26.178 195.46 63.908
+- qsec  1   109.034 278.32 75.217
+- wt    1   183.347 352.63 82.790
+
+Call:
+lm(formula = mpg ~ wt + qsec + am, data = mtcars)
+
+Coefficients:
+(Intercept)           wt         qsec           am
+      9.618       -3.917        1.226        2.936
+#+end_example
+
+**** Teste F — backward
+***** first step
+#+begin_src R :session 20_11_2024_03 :results output
+  drop1(model, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb
+       Df Sum of Sq    RSS    AIC F value  Pr(>F)
+<none>              147.49 70.898
+cyl     1    0.0799 147.57 68.915  0.0114 0.91609
+disp    1    3.9167 151.41 69.736  0.5576 0.46349
+hp      1    6.8399 154.33 70.348  0.9739 0.33496
+drat    1    1.6270 149.12 69.249  0.2317 0.63528
+wt      1   27.0144 174.51 74.280  3.8463 0.06325 .
+qsec    1    8.8641 156.36 70.765  1.2621 0.27394
+vs      1    0.1601 147.66 68.932  0.0228 0.88142
+am      1   10.5467 158.04 71.108  1.5016 0.23399
+gear    1    1.3531 148.85 69.190  0.1926 0.66521
+carb    1    0.4067 147.90 68.986  0.0579 0.81218
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** second step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_02 <- lm(mpg~.-cyl, data=mtcars)
+  drop1(model_02, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl
+       Df Sum of Sq    RSS    AIC F value  Pr(>F)
+<none>              147.57 68.915
+disp    1    3.9009 151.47 67.750  0.5815 0.45381
+hp      1    7.3632 154.94 68.473  1.0977 0.30615
+drat    1    1.9826 149.56 67.342  0.2956 0.59214
+wt      1   27.0280 174.60 72.297  4.0293 0.05716 .
+qsec    1   10.0933 157.67 69.032  1.5047 0.23292
+vs      1    0.2685 147.84 66.973  0.0400 0.84326
+am      1   11.8359 159.41 69.384  1.7645 0.19768
+gear    1    1.8211 149.40 67.308  0.2715 0.60754
+carb    1    0.5201 148.09 67.028  0.0775 0.78326
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** third step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_03 <- lm(mpg~.-cyl-vs, data=mtcars)
+  drop1(model_03, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl - vs
+       Df Sum of Sq    RSS    AIC F value  Pr(>F)
+<none>              147.84 66.973
+disp    1    3.6467 151.49 65.753  0.5673 0.45897
+hp      1    7.1060 154.95 66.475  1.1055 0.30399
+drat    1    2.2139 150.06 65.449  0.3444 0.56301
+wt      1   27.3799 175.22 70.410  4.2595 0.05049 .
+qsec    1   15.6830 163.53 68.200  2.4398 0.13195
+am      1   11.5694 159.41 67.384  1.7999 0.19283
+gear    1    2.1437 149.99 65.434  0.3335 0.56922
+carb    1    0.6855 148.53 65.121  0.1066 0.74696
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** fourth step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_04 <- lm(mpg~.-cyl-vs-carb, data=mtcars)
+  drop1(model_04, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl - vs - carb
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              148.53 65.121
+disp    1    10.110 158.64 65.229  1.6337 0.213420
+hp      1    14.826 163.35 66.166  2.3956 0.134763
+drat    1     1.932 150.46 63.535  0.3122 0.581508
+wt      1    69.127 217.66 75.350 11.1699 0.002717 **
+qsec    1    26.408 174.94 68.358  4.2672 0.049815 *
+am      1    12.323 160.85 65.672  1.9913 0.171042
+gear    1     1.565 150.09 63.457  0.2529 0.619641
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** fifth step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_05 <- lm(mpg~.-cyl-vs-carb-gear, data=mtcars)
+  drop1(model_05, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl - vs - carb - gear
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              150.09 63.457
+disp    1     8.545 158.64 63.229  1.4233 0.244054
+hp      1    13.285 163.38 64.171  2.2127 0.149381
+drat    1     3.345 153.44 62.162  0.5571 0.462401
+wt      1    67.572 217.66 73.351 11.2550 0.002536 **
+qsec    1    25.574 175.67 66.491  4.2598 0.049551 *
+am      1    20.036 170.13 65.466  3.3372 0.079692 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** sixth step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_06 <- lm(mpg~.-cyl-vs-carb-gear-drat, data=mtcars)
+  drop1(model_06, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl - vs - carb - gear - drat
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              153.44 62.162
+disp    1     6.629 160.07 61.515  1.1232 0.298972
+hp      1    12.572 166.01 62.682  2.1303 0.156387
+wt      1    69.043 222.48 72.051 11.6993 0.002075 **
+qsec    1    26.470 179.91 65.255  4.4853 0.043908 *
+am      1    32.198 185.63 66.258  5.4559 0.027488 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** seventh step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_07 <- lm(mpg~.-cyl-vs-carb-gear-drat-disp, data=mtcars)
+  drop1(model_07, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl - vs - carb - gear - drat - disp
+       Df Sum of Sq    RSS    AIC F value   Pr(>F)
+<none>              160.07 61.515
+hp      1     9.219 169.29 61.307  1.5551 0.223088
+wt      1    78.494 238.56 72.284 13.2403 0.001141 **
+qsec    1    20.225 180.29 63.323  3.4115 0.075731 .
+am      1    25.993 186.06 64.331  4.3845 0.045791 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+***** eighth step
+#+begin_src R :session 20_11_2024_03 :results output
+  model_08 <- lm(mpg~.-cyl-vs-carb-gear-drat-disp-hp, data=mtcars)
+  drop1(model_08, test='F') # dpi is the least significant — we take it out
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Single term deletions
+
+Model:
+mpg ~ (cyl + disp + hp + drat + wt + qsec + vs + am + gear +
+    carb) - cyl - vs - carb - gear - drat - disp - hp
+       Df Sum of Sq    RSS    AIC F value    Pr(>F)
+<none>              169.29 61.307
+wt      1   183.347 352.63 82.790 30.3258 6.953e-06 ***
+qsec    1   109.034 278.32 75.217 18.0343 0.0002162 ***
+am      1    26.178 195.46 63.908  4.3298 0.0467155 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+*** b) Compare o modelo estimado com o modelo completo utilizando um teste de hipóteses. Qual o modelo que escolhia?
+#+begin_src R :session 20_11_2024_04 :results output
+  complete_model <- lm(mpg~., data=mtcars)
+  model <- lm(mpg~wt+qsec+am, data=mtcars)
+  anova(complete_model, model)
+  # We don't reject H_0, i.e., we'd choose the model with the three variables.
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb
+: Model 2: mpg ~ wt + qsec + am
+:   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+: 1     21 147.49
+: 2     28 169.29 -7   -21.791 0.4432 0.8636
+
+* 25_11_2024
+** VIF - outro pressuposto para modelo com múltiplas variáveis
+*** primeira verificação
+**** vif()
+#+begin_src R :session 25_11_2024 :results output
+  library(car)
+  data(mtcars)
+  model <- lm(mpg~disp+hp+wt+drat, data=mtcars)
+  vif(model)
+  # problema de multicolinearidade -> retirar a variável disp
+#+end_src
+
+#+RESULTS:
+:     disp       hp       wt     drat
+: 8.209402 2.894373 5.096601 2.279547
+
+
+#+RESULTS:
+
+**** Cálculo completo - disp
+#+begin_src R :session 25_11_2024 :results output
+  disp_model <- lm(disp ~ hp + wt + drat, data = mtcars)
+  summary(disp_model) # multiple R-squared is 0.8782
+  disp_vif <- 1/(1-0.8782)
+  disp_vif
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = disp ~ hp + wt + drat, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-81.280 -32.886   1.924  31.281  88.200
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  64.5298   109.4004   0.590 0.560021
+hp            0.6692     0.1586   4.220 0.000233 ***
+wt           65.9758    14.1524   4.662 6.99e-05 ***
+drat        -40.1024    21.8041  -1.839 0.076510 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 45.51 on 28 degrees of freedom
+Multiple R-squared:  0.8782,	Adjusted R-squared:  0.8651
+F-statistic: 67.29 on 3 and 28 DF,  p-value: 6.461e-13
+[1] 8.210181
+#+end_example
+
+**** Cálculo completo - hp
+#+begin_src R :session 25_11_2024 :results output
+  hp_model <- lm(hp ~ disp + wt + drat, data = mtcars)
+  summary(hp_model) # multiple R-squared is 0.8782
+  hp_vif <- 1/(1-0.6545)
+  hp_vif
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = hp ~ disp + wt + drat, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-54.216 -23.769  -8.793  25.485 152.109
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) -54.4660   102.0381  -0.534 0.597706
+disp          0.5809     0.1377   4.220 0.000233 ***
+wt           -8.8313    17.4930  -0.505 0.617614
+drat         26.5667    20.9120   1.270 0.214395
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 42.4 on 28 degrees of freedom
+Multiple R-squared:  0.6545,	Adjusted R-squared:  0.6175
+F-statistic: 17.68 on 3 and 28 DF,  p-value: 1.232e-06
+[1] 2.894356
+#+end_example
+
+**** Cálculo completo - wt
+#+begin_src R :session 25_11_2024 :results output
+  wt_model <- lm(wt ~ disp + hp + drat, data = mtcars)
+  summary(wt_model) # multiple R-squared is 0.8782
+  wt_vif <- 1/(1-0.8038)
+  wt_vif
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = wt ~ disp + hp + drat, data = mtcars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-0.79317 -0.32223 -0.01007  0.33230  0.72695
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept)  2.817638   0.965884   2.917  0.00689 **
+disp         0.006623   0.001421   4.662 6.99e-05 ***
+hp          -0.001021   0.002023  -0.505  0.61761
+drat        -0.272131   0.225498  -1.207  0.23761
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.456 on 28 degrees of freedom
+Multiple R-squared:  0.8038,	Adjusted R-squared:  0.7828
+F-statistic: 38.23 on 3 and 28 DF,  p-value: 4.909e-10
+[1] 5.09684
+#+end_example
+
+**** Cálculo completo - drat
+#+begin_src R :session 25_11_2024 :results output
+  drat_model <- lm(drat ~ disp + hp + wt, data = mtcars)
+  summary(drat_model) # multiple R-squared is 0.8782
+  drat_vif <- 1/(1-0.5613)
+  drat_vif
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = drat ~ disp + hp + wt, data = mtcars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-0.72232 -0.25118  0.02228  0.23445  0.81990
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept)  4.500310   0.298053  15.099 5.54e-15 ***
+disp        -0.002688   0.001461  -1.839   0.0765 .
+hp           0.002051   0.001615   1.270   0.2144
+wt          -0.181682   0.150549  -1.207   0.2376
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3726 on 28 degrees of freedom
+Multiple R-squared:  0.5613,	Adjusted R-squared:  0.5143
+F-statistic: 11.94 on 3 and 28 DF,  p-value: 3.255e-05
+[1] 2.279462
+#+end_example
+
+*** segunda verificação
+#+begin_src R :session 25_11_2024 :results output
+  model_01 <- lm(mpg~hp+wt+drat, data=mtcars)
+  vif(model_01)
+  # agora todos os VIF são menores que 3
+  # problema de multicolinearidade -> retirar a variável disp
+#+end_src
+
+#+RESULTS:
+:       hp       wt     drat
+: 1.769308 2.869445 2.033837
+
+* 27_11_2024
+#+begin_src R :session 27_11_2024 :results output
+  data(mtcars)
+  model_01 <- lm(mpg ~ hp + wt + drat, data = mtcars)
+  summary(model_01)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mpg ~ hp + wt + drat, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-3.3598 -1.8374 -0.5099  0.9681  5.7078
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) 29.394934   6.156303   4.775 5.13e-05 ***
+hp          -0.032230   0.008925  -3.611 0.001178 **
+wt          -3.227954   0.796398  -4.053 0.000364 ***
+drat         1.615049   1.226983   1.316 0.198755
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.561 on 28 degrees of freedom
+Multiple R-squared:  0.8369,	Adjusted R-squared:  0.8194
+F-statistic: 47.88 on 3 and 28 DF,  p-value: 3.768e-11
+#+end_example
+
+#+begin_src R :session 27_11_2024 :results output
+  model_02 <- lm(mpg ~ hp + wt, data = mtcars)
+  summary(model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mpg ~ hp + wt, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-3.941 -1.600 -0.182  1.050  5.854
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
+hp          -0.03177    0.00903  -3.519  0.00145 **
+wt          -3.87783    0.63273  -6.129 1.12e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.593 on 29 degrees of freedom
+Multiple R-squared:  0.8268,	Adjusted R-squared:  0.8148
+F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
+#+end_example
+
+#+begin_src R :session 27_11_2024 :results output
+  # H0: beta_3 = 0 -> beta_3 é o coeficiente do drat
+  # H0: beta_3 != 0 -> beta_3 é o coeficiente do drat
+  # NOTA: Usamos o teste F parcial SSE os modelos são aninhamos
+  # model_02 corresponde à hipótese nula, pois já se retirou o beta_3.
+  anova(model_02, model_01)
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: mpg ~ hp + wt
+: Model 2: mpg ~ hp + wt + drat
+:   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+: 1     29 195.05
+: 2     28 183.68  1    11.366 1.7326 0.1988
+
+** Tentar melhorar o ajustamento com o termo quadrático I = hp^2
+#+begin_src R :session 27_11_2024 :results output
+  quad_model_01 <- lm(mpg~hp+wt+I(hp^2), data=mtcars)
+  summary(quad_model_01)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mpg ~ hp + wt + I(hp^2), data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-3.0589 -1.2603 -0.5089  0.7028  4.9805
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  4.108e+01  2.131e+00  19.276  < 2e-16 ***
+hp          -1.158e-01  3.467e-02  -3.341  0.00238 **
+wt          -3.030e+00  6.741e-01  -4.495  0.00011 ***
+I(hp^2)      2.207e-04  8.838e-05   2.497  0.01867 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.387 on 28 degrees of freedom
+Multiple R-squared:  0.8583,	Adjusted R-squared:  0.8432
+F-statistic: 56.55 on 3 and 28 DF,  p-value: 5.292e-12
+#+end_example
+
+** Tentar melhorar o ajustamento com o termo quadrático I = wt^2
+#+begin_src R :session 27_11_2024 :results output
+  quad_model_02 <- lm(mpg~hp+wt+I(wt^2), data=mtcars)
+  summary(quad_model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mpg ~ hp + wt + I(wt^2), data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-2.9799 -1.2543 -0.7521  1.2494  5.4202
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  47.837283   3.659017  13.074 1.92e-13 ***
+hp           -0.027283   0.008032  -3.397  0.00206 **
+wt          -10.822173   2.281031  -4.744 5.58e-05 ***
+I(wt^2)       0.981811   0.312848   3.138  0.00398 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.27 on 28 degrees of freedom
+Multiple R-squared:  0.8719,	Adjusted R-squared:  0.8581
+F-statistic:  63.5 on 3 and 28 DF,  p-value: 1.309e-12
+#+end_example
+
+** Avaliar melhor ajustamento - com R^2
+#+begin_src R :session 27_11_2024 :results output
+  model_02_r2a <- 81.48 # (modelo sem termo quadrático) obtidos através do summary
+  quad_model_01_r2a <- 84.32 # (termo quadrático - hp^2) obtidos através do summary
+  quad_model_02_r2a <- 85.81 # (termo quadrático - wt^2) obtidos através do summary
+  # O último modelo é mais ajustado
+#+end_src
+
+#+RESULTS:
+
+** Testar melhor ajustamento
+*** entre quad_model_01 e quad_model_02
+#+begin_src R :session 27_11_2024 :results output
+  anova(quad_model_01, quad_model_02)
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: mpg ~ hp + wt + I(hp^2)
+: Model 2: mpg ~ hp + wt + I(wt^2)
+:   Res.Df    RSS Df Sum of Sq F Pr(>F)
+: 1     28 159.52
+: 2     28 144.29  0    15.224
+*** entre model_02 e quad_model_01
+#+begin_src R :session 27_11_2024 :results output
+  anova(model_02, quad_model_01)
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: mpg ~ hp + wt
+: Model 2: mpg ~ hp + wt + I(hp^2)
+:   Res.Df    RSS Df Sum of Sq      F  Pr(>F)
+: 1     29 195.05
+: 2     28 159.52  1     35.53 6.2366 0.01867 *
+: ---
+: Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+*** entre model_02 e quad_model_02
+#+begin_src R :session 27_11_2024 :results output
+  anova(model_02, quad_model_02)
+#+end_src
+
+#+RESULTS:
+: Analysis of Variance Table
+:
+: Model 1: mpg ~ hp + wt
+: Model 2: mpg ~ hp + wt + I(wt^2)
+:   Res.Df    RSS Df Sum of Sq      F   Pr(>F)
+: 1     29 195.05
+: 2     28 144.29  1    50.755 9.8489 0.003978 **
+: ---
+: Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+** regressão múltipla
+#+begin_src R :session 27_11_2024_02 :results output
+  meses <- c(17,26,21,30,22,0,12,19,4,16,28,15,11,38,31,21,20,13,30,14)
+  firma <- c(rep('CO', 10), rep('Ca',10)) # aqui a categoria de referência é o CA
+  model <- lm(meses~firma)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = meses ~ firma)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-16.70  -7.35  -0.20   6.40  15.90
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)    22.10       2.92   7.568 5.35e-07 ***
+firmaCO        -5.40       4.13  -1.308    0.207
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 9.235 on 18 degrees of freedom
+Multiple R-squared:  0.08674,	Adjusted R-squared:  0.03601
+F-statistic:  1.71 on 1 and 18 DF,  p-value: 0.2075
+#+end_example
+
+#+begin_src R :session 27_11_2024_02 :results output
+  firma_02 <- relevel(as.factor(firma), 'CO') # aqui a categoria de referência é o CO
+  model_02 <- lm(meses~firma_02)
+  summary(model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = meses ~ firma_02)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-16.70  -7.35  -0.20   6.40  15.90
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)    16.70       2.92   5.719 2.02e-05 ***
+firma_02Ca      5.40       4.13   1.308    0.207
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 9.235 on 18 degrees of freedom
+Multiple R-squared:  0.08674,	Adjusted R-squared:  0.03601
+F-statistic:  1.71 on 1 and 18 DF,  p-value: 0.2075
+#+end_example
+
+#+begin_src R :session 27_11_2024_02 :results output
+  firma_03 <- c(rep('CO',7), rep('Ca',7), rep('SE',6))
+  model_03 <- lm(meses ~ firma_03)
+  summary(model_03)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = meses ~ firma_03)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-18.2857  -6.5893  -0.8929   7.9107  19.2857
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  18.7143     3.7150   5.037 0.000101 ***
+firma_03CO   -0.4286     5.2538  -0.082 0.935939
+firma_03SE    2.7857     5.4684   0.509 0.617003
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 9.829 on 17 degrees of freedom
+Multiple R-squared:  0.02287,	Adjusted R-squared:  -0.09208
+F-statistic: 0.199 on 2 and 17 DF,  p-value: 0.8215
+#+end_example
+
+*** mudando a referência para SE
+#+begin_src R :session 27_11_2024_02 :results output
+  firma_04 <- relevel(as.factor(firma_03), 'SE') # aqui a categoria de referência é o SE
+  model_04 <- lm(meses ~ firma_04)
+  summary(model_04)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = meses ~ firma_04)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-18.2857  -6.5893  -0.8929   7.9107  19.2857
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   21.500      4.013   5.358 5.22e-05 ***
+firma_04Ca    -2.786      5.468  -0.509    0.617
+firma_04CO    -3.214      5.468  -0.588    0.564
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 9.829 on 17 degrees of freedom
+Multiple R-squared:  0.02287,	Adjusted R-squared:  -0.09208
+F-statistic: 0.199 on 2 and 17 DF,  p-value: 0.8215
+#+end_example
+
+* 02_12_2024
+** [[file:~/Documents/CD/year_2/semester_01/modelos_lineares_aplicacoes/exercicios/Exercicioextraqualitativa.pdf][exercicioextraqualitativa]].pdf
+#+begin_src R :session 02_12_2024__01 :results output
+  salario <- c(300,350,370,360,400,370,420,390,400,430,420,410)
+  genero <- c(rep('F', 5), rep('M',7))
+  genero_ref <- relevel(as.factor(genero), 'M') # aqui a categoria de referência é o F
+  model <- lm(salario~genero)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = salario ~ genero)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-56.000  -8.429   4.143  14.286  44.000
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   356.00      12.56  28.337 6.96e-11 ***
+generoM        49.71      16.45   3.022   0.0128 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 28.09 on 10 degrees of freedom
+Multiple R-squared:  0.4774,	Adjusted R-squared:  0.4251
+F-statistic: 9.135 on 1 and 10 DF,  p-value: 0.01284
+#+end_example
+
+** Género com três categorias
+#+begin_src R :session 02_12_2024__01 :results output
+  # genero = {F,F,F,F,M,M,M,M,O,O,O,O}
+  genero_02 <- c(rep('F', 4), rep('M',4), rep('O',4)) # aqui a categoria de referência é o CA
+  model_02 <- lm(salario~genero_02)
+  summary(model_02)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = salario ~ genero_02)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+ -45.0   -7.5    5.0   15.0   25.0
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   345.00      11.43  30.194 2.34e-10 ***
+genero_02M     50.00      16.16   3.094   0.0128 *
+genero_02O     70.00      16.16   4.332   0.0019 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 22.85 on 9 degrees of freedom
+Multiple R-squared:  0.6887,	Adjusted R-squared:  0.6196
+F-statistic: 9.957 on 2 and 9 DF,  p-value: 0.005237
+#+end_example

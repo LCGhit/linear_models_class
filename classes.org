@@ -3545,3 +3545,152 @@ Residual standard error: 22.85 on 9 degrees of freedom
 Multiple R-squared:  0.6887,	Adjusted R-squared:  0.6196
 F-statistic: 9.957 on 2 and 9 DF,  p-value: 0.005237
 #+end_example
+
+* 04_12_2024
+** 1
+#+begin_src R :session 04_12_2024__01 :results output
+  meses=c(17,26,21,30,22,0,12,19,4,16,28,15,11,38,31,21,20,13,30,14) # variável dependente
+  tamanho=c(151,92,175,31,104,277,210,120,290,238,164,272,295,68,85,224,166,305,124,246) # variável contínua
+  firma=c(rep("CO",10),rep("Ca",10)) # variáveis categóricas
+  ## firma2=c(rep("CO",7),rep("Ca",7),rep("SE",6))
+  model <- lm(meses~tamanho+firma)
+  summary(model) # p-valor de coeficiente de firmaCo=3.74e-05, pelo que se rejeita H_0, i.e., beta2 != 0
+  predict(model, new=data.frame(firma="CO", tamanho=90), interval='prediction')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = meses ~ tamanho + firma)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-5.6915 -1.7036 -0.4385  1.9210  6.3406
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) 41.929538   2.010101  20.859 1.50e-13 ***
+tamanho     -0.101742   0.008891 -11.443 2.07e-09 ***
+firmaCO     -8.055469   1.459106  -5.521 3.74e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.221 on 17 degrees of freedom
+Multiple R-squared:  0.8951,	Adjusted R-squared:  0.8827
+F-statistic:  72.5 on 2 and 17 DF,  p-value: 4.765e-09
+       fit      lwr      upr
+1 24.71728 17.43792 31.99664
+#+end_example
+
+** 2
+#+begin_src R :session 04_12_2024__01 :results output
+  model_h0 <- lm(meses~tamanho)
+  model_h1 <- lm(meses~tamanho + firma + (tamanho*firma))
+  model_h2 <- lm(meses~(tamanho*firma)) # outra forma de expressar model_h1
+  anova(model_h0, model_h1)
+  anova(model_h0, model_h2) # resultado igual ao anterior
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Model 1: meses ~ tamanho
+Model 2: meses ~ tamanho + firma + (tamanho * firma)
+  Res.Df    RSS Df Sum of Sq      F  Pr(>F)
+1     18 492.63
+2     16 176.38  2    316.25 14.344 0.00027 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Analysis of Variance Table
+
+Model 1: meses ~ tamanho
+Model 2: meses ~ (tamanho * firma)
+  Res.Df    RSS Df Sum of Sq      F  Pr(>F)
+1     18 492.63
+2     16 176.38  2    316.25 14.344 0.00027 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Call:
+lm(formula = meses ~ (tamanho * firma))
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-5.7144 -1.7064 -0.4557  1.9311  6.3259
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)
+(Intercept)     41.9696196  2.7194341  15.433 4.98e-11 ***
+tamanho         -0.1019478  0.0128711  -7.921 6.31e-07 ***
+firmaCO         -8.1312501  3.6540517  -2.225   0.0408 *
+tamanho:firmaCO  0.0004171  0.0183312   0.023   0.9821
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.32 on 16 degrees of freedom
+Multiple R-squared:  0.8951,	Adjusted R-squared:  0.8754
+F-statistic: 45.49 on 3 and 16 DF,  p-value: 4.675e-08
+#+end_example
+
+** d)
+#+begin_src  R :session 04_12_2024__01 :results output
+  summary(model_h1)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = meses ~ tamanho + firma + (tamanho * firma))
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-5.7144 -1.7064 -0.4557  1.9311  6.3259
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)
+(Intercept)     41.9696196  2.7194341  15.433 4.98e-11 ***
+tamanho         -0.1019478  0.0128711  -7.921 6.31e-07 ***
+firmaCO         -8.1312501  3.6540517  -2.225   0.0408 *
+tamanho:firmaCO  0.0004171  0.0183312   0.023   0.9821
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.32 on 16 degrees of freedom
+Multiple R-squared:  0.8951,	Adjusted R-squared:  0.8754
+F-statistic: 45.49 on 3 and 16 DF,  p-value: 4.675e-08
+#+end_example
+
+** questao aula
+#+begin_src R :results output
+  data(mtcars)
+  am=c(rep("automatica",13),rep("manual",19))
+  model <- lm(mtcars$mpg~mtcars$wt+am)
+  summary(model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mtcars$mpg ~ mtcars$wt + am)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-4.6620 -2.2595  0.0064  1.5132  6.7605
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  37.0888     2.0482  18.108  < 2e-16 ***
+mtcars$wt    -5.3376     0.5686  -9.388 2.71e-10 ***
+ammanual      0.2934     1.1149   0.263    0.794
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.094 on 29 degrees of freedom
+Multiple R-squared:  0.7534,	Adjusted R-squared:  0.7364
+F-statistic:  44.3 on 2 and 29 DF,  p-value: 1.525e-09
+
+#+end_example

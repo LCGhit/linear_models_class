@@ -3668,7 +3668,24 @@ F-statistic: 45.49 on 3 and 16 DF,  p-value: 4.675e-08
   data(mtcars)
   am=c(rep("automatica",13),rep("manual",19))
   model <- lm(mtcars$mpg~mtcars$wt+am)
+
+  am_02=factor(mtcars$am)
+  model_02 <- lm(mtcars$mpg~mtcars$wt+am_02)
+
   summary(model)
+  summary(model_02)
+
+
+  ## am_03 <- character()
+  ## for (item in am_02) {
+  ##   if (item == 0) {
+  ##     am_03[length(am_03)+1] <- "automatica"
+  ##   } else {
+  ##     am_03[length(am_03)+1] <- "manual"
+  ##   }
+  ## }
+  ## model_03 <- lm(mtcars$mpg~mtcars$wt+am_03)
+  ## summary(model_03)
 #+end_src
 
 #+RESULTS:
@@ -3693,4 +3710,136 @@ Residual standard error: 3.094 on 29 degrees of freedom
 Multiple R-squared:  0.7534,	Adjusted R-squared:  0.7364
 F-statistic:  44.3 on 2 and 29 DF,  p-value: 1.525e-09
 
+
+Call:
+lm(formula = mtcars$mpg ~ mtcars$wt + am_02)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-4.5295 -2.3619 -0.1317  1.4025  6.8782
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 37.32155    3.05464  12.218 5.84e-13 ***
+mtcars$wt   -5.35281    0.78824  -6.791 1.87e-07 ***
+am_021      -0.02362    1.54565  -0.015    0.988
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.098 on 29 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7358
+F-statistic: 44.17 on 2 and 29 DF,  p-value: 1.579e-09
+
+
+Call:
+lm(formula = mtcars$mpg ~ mtcars$wt + am_03)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-4.5295 -2.3619 -0.1317  1.4025  6.8782
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 37.32155    3.05464  12.218 5.84e-13 ***
+mtcars$wt   -5.35281    0.78824  -6.791 1.87e-07 ***
+am_03manual -0.02362    1.54565  -0.015    0.988
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.098 on 29 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7358
+F-statistic: 44.17 on 2 and 29 DF,  p-value: 1.579e-09
+
 #+end_example
+
+* 05_12_2024
+** 1
+#+begin_src R :session 05_12_2024__01 :results output
+  library(ISLR2)
+  set.seed(1)
+
+  train <- sample(392,196) # retrieves 196 random observations from 392 -> conjunto de treino
+  lm.fit <- lm(mpg~horsepower, data=Auto, subset=train)
+  mean((Auto$mpg - predict(lm.fit, Auto))[-train]^2) # calcular o erro quadrático médio (MSE) para o conjunto de validação
+
+  lm.fit2 <- lm(Auto$mpg~poly(2),data=Auto, subset=train)
+  mean((Auto$mpg - predict(lm.fit2, Auto))[-train]^2) # este mse é menor - o erro quadrático médio é menor - portanto tem melhor capacidade preditiva
+
+  summary(lm.fit)
+  summary(lm.fit2)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 23.26601
+[1] 18.71646
+
+Call:
+lm(formula = mpg ~ horsepower, data = Auto, subset = train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-9.3177 -3.5428 -0.5591  2.3910 14.6836
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) 41.283548   1.044352   39.53   <2e-16 ***
+horsepower  -0.169659   0.009556  -17.75   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 5.032 on 194 degrees of freedom
+Multiple R-squared:  0.619,	Adjusted R-squared:  0.6171
+F-statistic: 315.2 on 1 and 194 DF,  p-value: < 2.2e-16
+
+Call:
+lm(formula = Auto$mpg ~ poly(horsepower, 2), data = Auto, subset = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-12.8711  -2.6655  -0.0096   2.0806  16.1063
+
+Coefficients:
+                      Estimate Std. Error t value Pr(>|t|)
+(Intercept)            23.5496     0.3175  74.182  < 2e-16 ***
+poly(horsepower, 2)1 -123.5881     6.4587 -19.135  < 2e-16 ***
+poly(horsepower, 2)2   47.7189     6.3613   7.501 2.25e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.439 on 193 degrees of freedom
+Multiple R-squared:  0.705,	Adjusted R-squared:  0.702
+F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
+#+end_example
+
+** nota sobre diferença de predict e fitted
+#+begin_src R :session 05_12_2024__01 :results output
+  length(predict(lm.fit, Auto))
+  length(fitted(lm.fit, Auto))
+#+end_src
+
+#+RESULTS:
+: [1] 392
+: [1] 196
+
+** função usada para calcular o LOOCV
+#+begin_src R :session 05_12_2024__01 :results output
+  loocv_mse <- function(data, formula) {
+    n <- nrow(data)
+    mse_values <- numeric(n)
+    for(i in 1:n) {
+      train_data <- data[-i, ]
+      test_data <- data[i, , drop=FALSE]
+      model <- lm(formula, data=train_data)
+      prediction <- predict(model, newdata=test_data)
+      mse_values[i] <- (test_data$mpg - prediction)^2
+    }
+    mse <- mean(mse_values)
+    return(mse)
+  }
+
+
+#+end_src
+
+#+RESULTS:

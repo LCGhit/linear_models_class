@@ -3762,7 +3762,7 @@ F-statistic: 44.17 on 2 and 29 DF,  p-value: 1.579e-09
   lm.fit <- lm(mpg~horsepower, data=Auto, subset=train)
   mean((Auto$mpg - predict(lm.fit, Auto))[-train]^2) # calcular o erro quadrático médio (MSE) para o conjunto de validação
 
-  lm.fit2 <- lm(Auto$mpg~poly(2),data=Auto, subset=train)
+  lm.fit2 <- lm(Auto$mpg~poly(horsepower, 2),data=Auto, subset=train)
   mean((Auto$mpg - predict(lm.fit2, Auto))[-train]^2) # este mse é menor - o erro quadrático médio é menor - portanto tem melhor capacidade preditiva
 
   summary(lm.fit)
@@ -3813,7 +3813,7 @@ Multiple R-squared:  0.705,	Adjusted R-squared:  0.702
 F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
 #+end_example
 
-** nota sobre diferença de predict e fitted
+** nota sobre diferença de predict  fitted
 #+begin_src R :session 05_12_2024__01 :results output
   length(predict(lm.fit, Auto))
   length(fitted(lm.fit, Auto))
@@ -3823,7 +3823,7 @@ F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
 : [1] 392
 : [1] 196
 
-** função usada para calcular o LOOCV
+** função usada para calcular o LOOC
 #+begin_src R :session 05_12_2024__01 :results output
   loocv_mse <- function(data, formula) {
     n <- nrow(data)
@@ -3839,7 +3839,34 @@ F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
     return(mse)
   }
 
+  mse <- loocv_mse(Auto, mpg~horsepower) # aplicar função aos dados
+  cat("MSE usand LOOCV:", mse, "\n")
+#+end_src
+
+#+RESULTS:
+: MSE usand LOOCV: 24.23151
+
+** função para calcular MSE usando k-fold cross-validation
+#+begin_src R :session 05_12_2024__01 :results output
+  kfold_mse <- function(data, formula, k = 5) {
+    n <- nrow(data)
+    folds <- sample(rep(1:k, length.out = n)) # criar índices para os folds
+    mse_values <- numeric(k)
+    for (i in 1:k) {
+      train_data <- data[folds != i,]
+      test_data <- data[folds == i,]
+
+      model <- lm(formula, data = train_data) # ajustar modelo ao conjunto de treino
+      predictions <- predict(model, newdata = test_data) #fazer previsões no conjunto de teste
+      mse_values[i] <- mean((test_data$mpg - predictions)^2) # calcular MSE para o fold atual
+    }
+    mse <- mean(mse_values) # calcular o MSE médio
+    return(mse)
+  }
+  mse_5fold <- kfold_mse(Auto, mpg~horsepower, k = 5) # aplicar função aos dados
+  cat("MSE usando 5-fold cross-validation:", mse_5fold, "\n")
 
 #+end_src
 
 #+RESULTS:
+: MSE usando 5-fold cross-validation: 24.14201

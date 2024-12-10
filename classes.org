@@ -3813,7 +3813,7 @@ Multiple R-squared:  0.705,	Adjusted R-squared:  0.702
 F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
 #+end_example
 
-** nota sobre diferença de predict  fitted
+** nota sobre diferença de predict fitted
 #+begin_src R :session 05_12_2024__01 :results output
   length(predict(lm.fit, Auto))
   length(fitted(lm.fit, Auto))
@@ -3870,3 +3870,71 @@ F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
 
 #+RESULTS:
 : MSE usando 5-fold cross-validation: 24.14201
+
+* resolução exame
+** 1
+*** a
+y_hat = beta_00_hat + beta_01_hat*X
+O beta_00_hat é o valor esperado da tensão arterial diastólica quando o valor esperado de beta_01_hat é zero.
+O beta_01_hat é o valor esperado do aumento na tensão arterial por cada aumento unitário na idade.
+*** b
+#+begin_src R :session res_exame_01 :results output
+  X <- c(5,8,11,7,13,12,12,6)
+  Y <- c(63,67,74,64,75,69,90,60)
+  model <- lm(Y~X)
+  summary(model)
+  sse <- (6.683^2)*6
+  ssr <- sum((fitted(model)-mean(Y))^2)
+  sst <- ssr+sse
+  r_squared <- 1-(sse/sst)
+  r_squared_adjusted <- 1-((sse/6)/(sst/7))
+  r_squared
+  r_squared_adjusted
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Y ~ X)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-7.6667 -3.0000 -0.6667  0.4167 13.3333
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  48.6667     7.8869   6.171 0.000832 ***
+X             2.3333     0.8135   2.868 0.028487 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 6.683 on 6 degrees of freedom
+Multiple R-squared:  0.5783,	Adjusted R-squared:  0.508
+F-statistic: 8.228 on 1 and 6 DF,  p-value: 0.02849
+[1] 0.5783076
+[1] 0.5080256
+#+end_example
+#+begin_comment
+Ao nível de significância de 5% há evidência estatística de que a variável explicativa é significativa, ou seja, que tem impacto na variável resposta.
+#+end_comment
+
+*** f
+#+begin_src R :session res_exame_01 :results output
+  predict(model, new=data.frame(X=10), interval="prediction")
+#+end_src
+
+#+RESULTS:
+:   fit      lwr      upr
+: 1  72 54.59039 89.40961
+
+*** g
+#+begin_src R :session res_exame_01 :results output
+  confint(model, level=0.9)
+#+end_src
+
+#+RESULTS:
+:                    5 %      95 %
+: (Intercept) 33.3410871 63.992246
+: X            0.7526205  3.914046

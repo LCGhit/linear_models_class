@@ -1428,7 +1428,8 @@ ddpi   0.3047872 -0.04782569  0.02532138 -0.1294855  1.00000000
 #+end_example
 
 * 11_11_2024
-** a)
+** ficha [[file:~/Documents/CD/year_2/semester_01/modelos_lineares_aplicacoes/exercicios/ExercicioAula.pdf][ExercícioAula]]
+*** a)
 #+begin_src R :session 11_11_2024 :results output
   library(faraway)
   data(savings)
@@ -1463,8 +1464,7 @@ pop75  0.3165211 -0.90847871  1.00000000  0.7869995  0.02532138
 dpi    0.2203589 -0.75618810  0.78699951  1.0000000 -0.12948552
 ddpi   0.3047872 -0.04782569  0.02532138 -0.1294855  1.00000000
 #+end_example
-
-** b)
+*** b)
 #+begin_src R :session 11_11_2024 :file generated_graphs/11_11_2024.png :results graphics file
   plot(savings)
   # exemplo comentário: relação negativa forte entre pop75 e pop15
@@ -1473,8 +1473,7 @@ ddpi   0.3047872 -0.04782569  0.02532138 -0.1294855  1.00000000
 
 #+RESULTS:
 [[file:generated_graphs/11_11_2024.png]]
-
-** c)
+*** c)
 #+begin_src R :session 11_11_2024 :results output
   model <- lm(sr~pop15+pop75+dpi+ddpi, data=savings)
   model <- lm(sr~., data=savings) # alternative, same as above
@@ -1506,7 +1505,7 @@ Residual standard error: 3.803 on 45 degrees of freedom
 Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
 F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 #+end_example
-*** nota para adaptar modelo (seleção das variáveis explicativas) - retirar as variáveis com maior p-valor, pois se o seu p-valor é superio a 0.05, então não rejeitamos H_0: Beta = 0, ou seja, a variável será igual a zero e não tem significância
+**** nota para adaptar modelo (seleção das variáveis explicativas) - retirar as variáveis com maior p-valor, pois se o seu p-valor é superio a 0.05, então não rejeitamos H_0: Beta = 0, ou seja, a variável será igual a zero e não tem significância
 #+begin_src R :session 11_11_2024 :results output
   summary(model) # var mais significativa é dpi
 #+end_src
@@ -1535,7 +1534,7 @@ Residual standard error: 3.803 on 45 degrees of freedom
 Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
 F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 #+end_example
-*** retirar dpi
+**** retirar dpi
 #+begin_src R :session 11_11_2024 :results output
   model_03 <- lm(sr~.-dpi, data=savings)
   summary(model_03) # agora a var mais significativa é p75
@@ -1565,7 +1564,7 @@ Multiple R-squared:  0.3365,	Adjusted R-squared:  0.2933
 F-statistic: 7.778 on 3 and 46 DF,  p-value: 0.0002646
 #+end_example
 
-*** retirar pop75
+**** retirar pop75
 #+begin_src R :session 11_11_2024 :results output
   model_04 <- lm(sr~.-dpi-pop75, data=savings)
   summary(model_04)
@@ -1593,8 +1592,7 @@ Residual standard error: 3.861 on 47 degrees of freedom
 Multiple R-squared:  0.2878,	Adjusted R-squared:  0.2575
 F-statistic: 9.496 on 2 and 47 DF,  p-value: 0.0003438
 #+end_example
-
-** d)
+*** d)
 #+begin_src R :session 11_11_2024 :results output
   summary(model) # resposta: beta_3 = 0.00033
 #+end_src
@@ -1623,8 +1621,7 @@ Residual standard error: 3.803 on 45 degrees of freedom
 Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
 F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 #+end_example
-
-** e)
+*** e)
 #+begin_src R :session 11_11_2024 :results output
   summary(model) # ANOVA table or see last line in summary(model)
 #+end_src
@@ -1654,7 +1651,7 @@ Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
 F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 #+end_example
 
-*** ANOVA table
+**** ANOVA table
 #+begin_src R :session 11_11_2024 :results output
   anova(model)
   1-pf(abs(5.756), 4, 45)
@@ -1676,7 +1673,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 [1] 0.0007900702
 #+end_example
 
-** f) IC para pop75
+*** f) IC para pop75
 #+begin_src R :session 11_11_2024 :results output
   confint(model) # -3.873977955,  0.490982602
 #+end_src
@@ -1689,7 +1686,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 : dpi         -0.002212248  0.001538444
 : ddpi         0.014533628  0.804856227
 
-** g) Variância dos erros
+*** g) Variância dos erros
 #+begin_src R :session 11_11_2024 :results output
   summary(model) # Residual standard error squared -> 3.803^2 = 14.462809
 #+end_src
@@ -1719,7 +1716,7 @@ Multiple R-squared:  0.3385,	Adjusted R-squared:  0.2797
 F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 #+end_example
 
-** h)
+*** h)
 #+begin_src R :session 11_11_2024 :results output
   predict(model, new=data.frame(pop15=25,pop75=4,dpi=1000,ddpi=4), interval='prediction')
 #+end_src
@@ -1728,7 +1725,7 @@ F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 :        fit      lwr      upr
 : 1 11.57214 3.430158 19.71413
 
-** matriz das covariâncias
+*** matriz das covariâncias
 #+begin_src R :session 11_11_2024 :results output
   vcov(model)
   # variância do beta_0 = 54.088907156; variância do beta_1 = 2.092137e-02;
@@ -1743,7 +1740,7 @@ F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 : dpi         -0.001135929  2.422953e-05 -0.0003703298  8.669606e-07  4.667202e-05
 : ddpi        -0.271654582  2.907814e-03 -0.0116339234  4.667202e-05  3.849331e-02
 
-** matriz das covariâncias
+*** matriz das covariâncias
 #+begin_src R :session 11_11_2024 :results output
   X <- model.matrix(model)
   var_hat <- 3.803^2
@@ -3871,7 +3868,7 @@ F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
 #+RESULTS:
 : MSE usando 5-fold cross-validation: 24.14201
 
-* resolução exame
+* resolução [[file:~/Documents/CD/year_2/semester_01/modelos_lineares_aplicacoes/testes_exemplos/5779779 (2).pdf][exame]]
 ** 1
 *** a
 y_hat = beta_00_hat + beta_01_hat*X

@@ -3935,3 +3935,212 @@ Ao nível de significância de 5% há evidência estatística de que a variável
 :                    5 %      95 %
 : (Intercept) 33.3410871 63.992246
 : X            0.7526205  3.914046
+
+* 11_12_2024
+** function
+#+begin_src R :session 11_12_2024__01 :results output
+  loocv_mse <- function(data, formula) {
+    n <- nrow(data)
+    mse_values <- numeric(n)
+    for(i in 1:n) {
+      train_data <- data[-i, ]
+      test_data <- data[i, , drop=FALSE]
+      model <- lm(formula, data=train_data)
+      prediction <- predict(model, newdata=test_data)
+      mse_values[i] <- (test_data$mpg - prediction)^2
+    }
+    mse <- mean(mse_values)
+    return(mse)
+  }
+#+end_src
+
+#+RESULTS:
+** abordagem validation approach
+#+begin_src R :session 11_12_2024__01 :results output
+  data(mtcars)
+  dim(mtcars)
+  set.seed(1)
+  train <- sample(32,16)
+  lm.fit <- lm(mpg~wt+am, data=mtcars, subset=train)
+  mean((mtcars$mpg-predict(lm.fit, mtcars))[-train]^2)
+  ## predict(lm.fit, mtcars)
+  ## fitted(lm.fit)
+  mean((mtcars$mpg-fitted(lm.fit))^2)
+#+end_src
+
+#+RESULTS:
+: [1] 32 11
+: [1] 26.13327
+: [1] 59.62742
+
+** [[file:~/Documents/CD/year_2/semester_01/modelos_lineares_aplicacoes/testes_exemplos/TesterecursoML202223.pdf][testerecursoML]]
+*** a
+**** primeiro passo
+#+begin_src  R :session 11_12_2024__02 :results output
+  data(iris)
+  complete_model <- lm(iris$Sepal.Width~., data=iris)
+  table(iris$Species) # espécie de referência
+  step(complete_model, direction='backward')
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+    setosa versicolor  virginica
+        50         50         50
+Start:  AIC=-389.37
+iris$Sepal.Width ~ Sepal.Length + Petal.Length + Petal.Width +
+    Species
+
+               Df Sum of Sq    RSS     AIC
+<none>                      10.328 -389.37
+- Petal.Length  1   0.36195 10.689 -386.21
+- Petal.Width   1   1.84465 12.172 -366.72
+- Sepal.Length  1   2.38066 12.708 -360.26
+- Species       2   3.14643 13.474 -353.48
+
+Call:
+lm(formula = iris$Sepal.Width ~ Sepal.Length + Petal.Length +
+    Petal.Width + Species, data = iris)
+
+Coefficients:
+      (Intercept)       Sepal.Length       Petal.Length        Petal.Width  Speciesversicolor   Speciesvirginica
+           1.6572             0.3778            -0.1876             0.6257            -1.1603            -1.3983
+#+end_example
+#+begin_comment
+O valor AIC mais baixo é aquele correspondente ao modelo com todas as variáveis.
+Com o comando table(iris$Species) Verificamos que a referência é a setosa. Ou seja as variáveis dummy são Speciesversicolor se Speciesvirginica.
+sepal.width_hat = 1.65 + 0.3778*Sepal.Length -0.187*Petal.Length + 0.6257*Petal.Width - 1.16*Speciesversicolor - 1.3983*Speciesvirginica
+Beta_Sepal.Length_hat = 0.3778 é o aumento do valor esperado do Sepal.Width quando há o aumento de uma unidade de Sepal.Length mantendo constante as outras variáveis.
+#+end_comment
+
+*** a (02) Escrever o modelo ajustado da espécie Setosa.
+#+begin_comment
+sepal.width_hat = 1.65 + 0.3778*Sepal.Length -0.187*Petal.Length + 0.6257*Petal.Width
+#+end_comment
+
+*** b
+#+begin_src  R :session 11_12_2024__02 :results output
+  confint(complete_model)
+#+end_src
+
+#+RESULTS:
+:                        2.5 %      97.5 %
+: (Intercept)        1.1512680  2.16305976
+: Sepal.Length       0.2481714  0.50737540
+: Petal.Length      -0.3525966 -0.02253662
+: Petal.Width        0.3818480  0.86957303
+: Speciesversicolor -1.5423464 -0.77822421
+: Speciesvirginica  -1.9460551 -0.85045466
+
+#+end_src
+
+*** c
+#+begin_src  R :session 11_12_2024__02 :results output
+  summary(complete_model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = iris$Sepal.Width ~ ., data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.00102 -0.14786  0.00441  0.18544  0.69719
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)
+(Intercept)        1.65716    0.25595   6.475 1.40e-09 ***
+Sepal.Length       0.37777    0.06557   5.761 4.87e-08 ***
+Petal.Length      -0.18757    0.08349  -2.246   0.0262 *
+Petal.Width        0.62571    0.12338   5.072 1.20e-06 ***
+Speciesversicolor -1.16029    0.19329  -6.003 1.50e-08 ***
+Speciesvirginica  -1.39825    0.27715  -5.045 1.34e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2678 on 144 degrees of freedom
+Multiple R-squared:  0.6352,	Adjusted R-squared:  0.6225
+F-statistic: 50.14 on 5 and 144 DF,  p-value: < 2.2e-16
+#+end_example
+#+begin_comment
+H0: beta_Sepal.Length = beta_Petal.Length=beta_Sepal.Width=beta_Species=0
+H1: existe beta_j {beta_Petal.Length,beta_Sepal.Width,beta_Species} !=
+ET = 50.14
+P_value = 2.2*10^(-16)
+Rejeitar H0 ...
+#+end_comment
+
+*** d
+#+begin_src  R :session 11_12_2024__02 :results output
+  model_no_species <- lm(iris$Sepal.Width~.-Species, data=iris)
+  anova(model_no_species, complete_model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Model 1: iris$Sepal.Width ~ (Sepal.Length + Petal.Length + Petal.Width +
+    Species) - Species
+Model 2: iris$Sepal.Width ~ Sepal.Length + Petal.Length + Petal.Width +
+    Species
+  Res.Df    RSS Df Sum of Sq      F    Pr(>F)
+1    146 13.474
+2    144 10.328  2    3.1464 21.936 4.831e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+** 2
+#+begin_src  R :session 11_12_2024__03 :results output
+
+  Y <- c(100,50,70,50,80,25,40,50,100,55)
+  x <- c(6,5,5,5,6,4,5.5,6,8,6)
+  A <- c(1,1,1,0,0,1,0,0,1,1)
+  one <- c(rep(1,10))
+  X <- matrix(c(one, x, A), ncol=3)
+  beta_hat <- solve(t(X)%*%X)%*%t(X)%*%Y
+  beta_hat
+  summary(lm(Y~x+A))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+          [,1]
+[1,] -43.70062
+[2,]  17.54678
+[3,]  10.93555
+
+Call:
+lm(formula = Y ~ x + A)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-17.516 -12.211  -6.289  12.765  27.484
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -43.701     32.710  -1.336   0.2233
+x             17.547      5.598   3.135   0.0165 *
+A             10.936     11.441   0.956   0.3710
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 17.72 on 7 degrees of freedom
+Multiple R-squared:  0.6082,	Adjusted R-squared:  0.4963
+F-statistic: 5.433 on 2 and 7 DF,  p-value: 0.03765
+#+end_example
+** grupo 2 - 1
+#+begin_src  R :session 11_12_2024__04 :results output
+  a = 31/8
+  b = (0.6679)/(1-(0.6679))
+  a*b
+
+#+end_src
+
+#+RESULTS:
+: [1] 7.793172

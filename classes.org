@@ -1349,10 +1349,10 @@ F-statistic: 2.929 on 2 and 2 DF,  p-value: 0.2545
 [5,] 11.600000
 #+end_example
 
-** Residuals
+**  Residuals
 #+begin_src R :session 06_11_2024 :results output
-  e <- y - x%*%(solve(t(X)%*%X)%*%t(X)%*%y)
-  e <- y - x%*%beta # same as above
+  e <- y - X%*%(solve(t(X)%*%X)%*%t(X)%*%y)
+  e <- y - X%*%beta # same as above
   e_1 <- residuals(model)
   e
   e_1
@@ -1386,15 +1386,11 @@ F-statistic: 2.929 on 2 and 2 DF,  p-value: 0.2545
 
 ** Beta variance matrix
 #+begin_src R :session 06_11_2024 :results output
-  vcov(model)
+  new <- vcov(model)
   confint(model) # confidence interval
 #+end_src
 
 #+RESULTS:
-:             (Intercept)         x1          x2
-: (Intercept)   25.864444 -3.0133333 -11.8022222
-: x1            -3.013333  0.7533333   0.7533333
-: x2           -11.802222  0.7533333   7.0311111
 :                  2.5 %    97.5 %
 : (Intercept) -21.115377 22.648710
 : x1           -1.634478  5.834478
@@ -1653,12 +1649,14 @@ F-statistic: 5.756 on 4 and 45 DF,  p-value: 0.0007904
 
 **** ANOVA table
 #+begin_src R :session 11_11_2024 :results output
+  1-((650/(50-4-1))/((204.12+53.34+12.4+63.05+650)/(50-1)))
   anova(model)
   1-pf(abs(5.756), 4, 45)
 #+end_src
 
 #+RESULTS:
 #+begin_example
+[1] 0.279916
 Analysis of Variance Table
 
 Response: sr
@@ -2251,6 +2249,7 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 :         Mazda RX4     Mazda RX4 Wag        Datsun 710    Hornet 4 Drive Hornet Sportabout
 :          23.57233          22.58348          25.27582          21.26502          18.32727
 : [1] 23.57266 22.58381 25.27609 21.26535 18.32778
+: [1] 21.26535
 
 *** 3 Teste o ajustamento global do modelo através de uma análise de variância (ANOVA). Construa a tabela ANOVA e interprete os resultados para avaliar se o modelo linear múltiplo é adequado para prever mpg.
 #+begin_src R :session 18_11_2024_2 :results output
@@ -3312,10 +3311,74 @@ F-statistic:  63.5 on 3 and 28 DF,  p-value: 1.309e-12
   model_02_r2a <- 81.48 # (modelo sem termo quadrático) obtidos através do summary
   quad_model_01_r2a <- 84.32 # (termo quadrático - hp^2) obtidos através do summary
   quad_model_02_r2a <- 85.81 # (termo quadrático - wt^2) obtidos através do summary
-  # O último modelo é mais ajustado
+  summary(model_02)
+  summary(quad_model_01)
+  summary(quad_model_02)
+    # O último modelo é mais ajustado
 #+end_src
 
 #+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = mpg ~ hp + wt, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-3.941 -1.600 -0.182  1.050  5.854
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
+hp          -0.03177    0.00903  -3.519  0.00145 **
+wt          -3.87783    0.63273  -6.129 1.12e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.593 on 29 degrees of freedom
+Multiple R-squared:  0.8268,	Adjusted R-squared:  0.8148
+F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
+
+Call:
+lm(formula = mpg ~ hp + wt + I(hp^2), data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-3.0589 -1.2603 -0.5089  0.7028  4.9805
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  4.108e+01  2.131e+00  19.276  < 2e-16 ***
+hp          -1.158e-01  3.467e-02  -3.341  0.00238 **
+wt          -3.030e+00  6.741e-01  -4.495  0.00011 ***
+I(hp^2)      2.207e-04  8.838e-05   2.497  0.01867 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.387 on 28 degrees of freedom
+Multiple R-squared:  0.8583,	Adjusted R-squared:  0.8432
+F-statistic: 56.55 on 3 and 28 DF,  p-value: 5.292e-12
+
+Call:
+lm(formula = mpg ~ hp + wt + I(wt^2), data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-2.9799 -1.2543 -0.7521  1.2494  5.4202
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  47.837283   3.659017  13.074 1.92e-13 ***
+hp           -0.027283   0.008032  -3.397  0.00206 **
+wt          -10.822173   2.281031  -4.744 5.58e-05 ***
+I(wt^2)       0.981811   0.312848   3.138  0.00398 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.27 on 28 degrees of freedom
+Multiple R-squared:  0.8719,	Adjusted R-squared:  0.8581
+F-statistic:  63.5 on 3 and 28 DF,  p-value: 1.309e-12
+#+end_example
 
 ** Testar melhor ajustamento
 *** entre quad_model_01 e quad_model_02
@@ -3544,6 +3607,7 @@ F-statistic: 9.957 on 2 and 9 DF,  p-value: 0.005237
 #+end_example
 
 * 04_12_2024
+** [[file:~/Documents/CD/year_2/semester_01/modelos_lineares_aplicacoes/slides/variaveisqualitativasmultipla.pdf][exercise]] page 8
 ** 1
 #+begin_src R :session 04_12_2024__01 :results output
   meses=c(17,26,21,30,22,0,12,19,4,16,28,15,11,38,31,21,20,13,30,14) # variável dependente
@@ -3841,6 +3905,7 @@ F-statistic: 230.6 on 2 and 193 DF,  p-value: < 2.2e-16
 #+end_src
 
 #+RESULTS:
+: Error: object 'Auto' not found
 : MSE usand LOOCV: 24.23151
 
 ** função para calcular MSE usando k-fold cross-validation
